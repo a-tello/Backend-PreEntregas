@@ -1,0 +1,22 @@
+<h1>PRODUCTOS</h1>
+{{#if products.length}}
+<div class='product-container'>
+{{#each products}}
+    <div class='product'>
+        <div class="product-img-container">
+            <img src={{thumbnail}} alt={{title}}>
+        </div>
+        <div class="product-info-container">
+            <h3 class="product-title">{{title}}</h3>
+            <span class="product-id">ID: {{_id}}</span>
+            <span class="product-category">*{{category}}</span>
+            <span class="product-price">${{price}}</span>
+            <span class="product-stock">Disponibles: {{stock}}</span>
+        </div>
+    </div>
+{{/each}}
+</div>
+{{else}}
+<h2>No hay productos para mostrar.</h2>
+{{/if}}
+<p><strong>*Actualice para mostrar cambios</strong></p>

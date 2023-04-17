@@ -7,11 +7,13 @@ const router = Router()
 
 
 router.get('/', async (req, res) => {
-    const {limit=10, page=1, sort={},...query} = req.query
+    const {limit=10, page=1, sort=null,...query} = req.query
     
     try {
         const products = await productManager.getProducts(limit, page, query, sort)
-        res.status(200).json({products})
+        console.log(products.payload);
+        res.render('products',{style:'products.css', products:products.payload})
+        //res.status(200).json({products})
         
     } catch(error) {
         res.status(error.code).json({error: error.message})

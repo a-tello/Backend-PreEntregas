@@ -17,7 +17,7 @@ export default class ProductManager {
         try {
             //const products = productsModel.paginate({query},{limit, page, sort})
 
-            const products = await productsModel.paginate(query,{limit, page, sort: {price: sort}})
+            const products = await productsModel.paginate(query,{limit, page, sort: {price: sort}, lean:true})
             const info = {
                 status: true,
                 payload: products.docs,
