@@ -65,8 +65,7 @@ export default class ProductManager {
     async deleteProductById(productId) {
         
         try {
-            const a = await productsModel.findByIdAndDelete(productId)
-            return a
+            await productsModel.findByIdAndDelete(productId)
         } catch(err) {
             err.message = 'Cannot delete product'
             err.code = 400

@@ -54,9 +54,17 @@ router.put('/:cid', async (req, res) => {
 
 router.put('/:cid/products/:pid', async (req, res) => {
     const {cid, pid} = req.params
+    const {quantity} = req.body
     
     try {
+        if (quantity < 1) {
+            const error = new Error
+            error.message = 'Quantity must be greater than 0'
+            throw error
+        }
         
+        cartManager.updateProductQuantityFromCart(cid, pid, quantity)
+        res.status(201).json({'message': `Quantity of product ${pid} changed to ${quantity}`})
     } catch(error) {
         res.status(400).json({error: error.message})
     } 
@@ -67,7 +75,8 @@ router.delete('/:cid/products/:pid', async (req, res) => {
     const {cid, pid} = req.params
     
     try {
-        
+        await cartManager.deleteProductFromCart(cid, pid)
+        res.status(201).json({'message': `Product ${pid} deleted successfully from cart ${cid}`})
     } catch(error) {
         res.status(400).json({error: error.message})
     } 
@@ -78,7 +87,8 @@ router.delete('/:cid', async (req, res) => {
     const {cid} = req.params
     
     try {
-        
+        await cartManager.clearCart(cid)
+        res.status(201).json({'message': `Products deleted successfully. Cart ${cid} is empty`})
     } catch(error) {
         res.status(400).json({error: error.message})
     } 

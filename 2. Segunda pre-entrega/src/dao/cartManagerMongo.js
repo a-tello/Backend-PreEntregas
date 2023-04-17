@@ -50,13 +50,9 @@ class CartManager {
         const productManager = new ProductManager()
         try{
             await productManager.getProductById(productId)
-        } catch(err) {
-            throw err
-        }
-
-        try {
             await this.getCartById(cartId) 
-        } catch (err) {
+
+        } catch(err) {
             throw err
         }
 
@@ -70,11 +66,39 @@ class CartManager {
             {$push:{
                 "products":{product: productId, quantity:1}}})
         }
-
-
-        
     }
 
+    async updateProductQuantityFromCart(cartId, productId, newQuantity) {
+
+        const productManager = new ProductManager()
+        try{
+            await productManager.getProductById(productId)
+            await this.getCartById(cartId) 
+            await cartsModel.updateOne({_id:cartId, "products.product":productId}, {$set:{"products.$.quantity":newQuantity}})
+        } catch(err) {
+            throw err
+        }  
+    }
+
+    async deleteProductFromCart(cartId, productId) {
+
+        try {
+            await this.getCartById(cartId) 
+            await cartsModel.updateOne({_id:cartId}, {"$pull":{"products":{"product":productId}}})
+        } catch (err) {
+            throw err
+        }
+    }
+
+    async clearCart(cartId) {
+        
+        try {
+            await this.getCartById(cartId) 
+            await cartsModel.updateOne({_id:cartId}, {"$pull":{"products":{}}})
+        } catch (err) {
+            throw err
+        }
+    }
 }
 
 export default CartManager
