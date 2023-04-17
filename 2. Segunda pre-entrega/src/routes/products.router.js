@@ -11,14 +11,16 @@ router.get('/', async (req, res) => {
     
     try {
         const products = await productManager.getProducts(limit, page, query, sort)
-        console.log(products.payload);
+        
         res.render('products',{style:'products.css', products:products.payload})
+        
         
     } catch(error) {
         res.status(error.code).json({error: error.message})
 
     }
 })
+
 
 router.get('/:pid', async (req, res) => {
     const {pid} = req.params

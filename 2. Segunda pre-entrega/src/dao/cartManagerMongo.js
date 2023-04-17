@@ -69,7 +69,6 @@ class CartManager {
     }
 
     async addProductsToCart(cartId, products) {
-        console.log(products);
         try{
             await cartsModel.updateOne({_id:cartId}, {$push:{"products":{$each :products}}})
             const cart = await this.getCartById(cartId)
