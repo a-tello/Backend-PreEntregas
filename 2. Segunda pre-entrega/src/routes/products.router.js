@@ -7,11 +7,12 @@ const router = Router()
 
 
 router.get('/', async (req, res) => {
-    const {limit} = req.query
+    const {limit=10, page=1, sort={},...query} = req.query
     
     try {
-        const products = await productManager.getProducts(limit)
-        res.status(200).json({message: 'productos', products})
+        const url = req.url
+        const products = await productManager.getProducts(limit, page, query, sort, url)
+        res.status(200).json({products})
         
     } catch(error) {
         res.status(error.code).json({error: error.message})

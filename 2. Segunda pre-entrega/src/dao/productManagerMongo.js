@@ -12,12 +12,26 @@ export default class ProductManager {
         }
     }
     
-    async getProducts(limit) {
+    async getProducts(limit, page, query, sort, url) {
              
         try {
-            if(!limit) return await productsModel.find()
-
-            return await productsModel.find().limit(limit)
+            //const products = productsModel.paginate({query},{limit, page, sort})
+            const products = await productsModel.paginate(query,{limit, page, sort})
+            console.log(products);
+            const info = {
+                status: true,
+                payload: products.docs,
+                totalPages: products.totalPages,
+                prevPage: products.prevPage,
+                nextPage: products.nextPage,
+                page,
+                hasPrevPage:  products.hasPrevPage,
+                hasNextPage: products.hasNextPage , 
+                prevLink: products.hasPrevPage ? `${url}&page=${products.prevPage}` : null, 
+                nextLink: products.hasNextPage ? `localhost:8080/products${url}&page=${products.nextPage}` : null
+            }
+            
+            return info
         }
         catch(err) {
             err.code = 400
