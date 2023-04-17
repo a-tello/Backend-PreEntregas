@@ -1,4 +1,4 @@
-<h1>PRODUCTOS</h1>
+<h1 class="title">PRODUCTOS</h1>
 {{#if products.length}}
 <div class='product-container'>
 {{#each products}}
@@ -12,6 +12,7 @@
             <span class="product-category">*{{category}}</span>
             <span class="product-price">${{price}}</span>
             <span class="product-stock">Disponibles: {{stock}}</span>
+            <button class="product-cart-button">Agregar al carrito</button>
         </div>
     </div>
 {{/each}}

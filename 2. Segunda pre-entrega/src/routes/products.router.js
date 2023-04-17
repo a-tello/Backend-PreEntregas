@@ -13,7 +13,6 @@ router.get('/', async (req, res) => {
         const products = await productManager.getProducts(limit, page, query, sort)
         console.log(products.payload);
         res.render('products',{style:'products.css', products:products.payload})
-        //res.status(200).json({products})
         
     } catch(error) {
         res.status(error.code).json({error: error.message})

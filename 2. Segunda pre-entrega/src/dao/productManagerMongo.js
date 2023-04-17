@@ -15,7 +15,6 @@ export default class ProductManager {
     async getProducts(limit, page, query, sort) {
              
         try {
-            //const products = productsModel.paginate({query},{limit, page, sort})
 
             const products = await productsModel.paginate(query,{limit, page, sort: {price: sort}, lean:true})
             const info = {

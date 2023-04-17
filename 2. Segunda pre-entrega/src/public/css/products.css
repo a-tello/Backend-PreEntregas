@@ -1,3 +1,7 @@
+.title {
+    text-align: center;
+}
+
 .product-container {
     display: flex;
     flex-direction: row;
@@ -10,12 +14,18 @@
     display: flex;
     flex-direction: column;
     width: 300px;
-    height: 500px;
+    height: 520px;
     border-radius: 15px;
-    border: 1px solid black;
+    border: 1px solid rgb(198, 198, 198);
     padding: 10px;
     margin: 10px;
     text-align: center;
+    transition: all .5s;
+}
+
+.product:hover {
+    transform: scale(1.1);
+    box-shadow: 9px 10px 5px 3px rgba(0,0,0,0.17);
 }
 
 .product-img-container {
@@ -47,4 +57,18 @@
 .product-price {
     font-size: 1.3rem;
     font-weight: bold;
+}
+
+.product-cart-button {
+    background-color: rgb(11, 133, 11);
+    color: white;
+    font-weight: bold;
+    padding: 10px 50px;
+    margin: 10px 0;
+    border-radius: 15px;
+    align-self: center;
+}
+
+.product-cart-button:foucs {
+    background-color: rgb(9, 97, 9);
 }
