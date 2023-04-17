@@ -43,9 +43,11 @@ router.post('/:cid/products/:pid', async (req, res) => {
 
 router.put('/:cid', async (req, res) => {
     const {cid} = req.params
+    const products = req.body
     
     try {
-        
+        const cart = await cartManager.addProductsToCart(cid, products)
+        res.status(201).json({'message': 'Products added successfully', cart})
     } catch(error) {
         res.status(400).json({error: error.message})
     } 
