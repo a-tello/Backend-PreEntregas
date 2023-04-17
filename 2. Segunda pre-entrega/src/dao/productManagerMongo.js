@@ -15,8 +15,15 @@ export default class ProductManager {
     async getProducts(limit, page, query, sort) {
              
         try {
-
+            page = parseInt(page)
             const products = await productsModel.paginate(query,{limit, page, sort: {price: sort}, lean:true})
+            
+            if (page > products.totalPages || isNaN(page)) {
+                const err = new Error
+                err.message = "That page doesn't exist"
+                err.code = 404
+                throw err
+            }
             const info = {
                 status: true,
                 payload: products.docs,
@@ -26,8 +33,8 @@ export default class ProductManager {
                 page,
                 hasPrevPage:  products.hasPrevPage,
                 hasNextPage: products.hasNextPage , 
-                prevLink: products.hasPrevPage ? '' : null, 
-                nextLink: products.hasNextPage ? '': null
+                prevLink: products.hasPrevPage ? `localhost:8080/products?page=${products.prevPage}` : null, 
+                nextLink: products.hasNextPage ? `localhost:8080/products?page=${products.nextPage}` : null
             }
             
             return info
