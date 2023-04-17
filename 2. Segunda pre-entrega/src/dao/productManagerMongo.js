@@ -12,12 +12,12 @@ export default class ProductManager {
         }
     }
     
-    async getProducts(limit, page, query, sort, url) {
+    async getProducts(limit, page, query, sort) {
              
         try {
             //const products = productsModel.paginate({query},{limit, page, sort})
-            const products = await productsModel.paginate(query,{limit, page, sort})
-            console.log(products);
+
+            const products = await productsModel.paginate(query,{limit, page, sort: {price: sort}})
             const info = {
                 status: true,
                 payload: products.docs,
@@ -27,8 +27,8 @@ export default class ProductManager {
                 page,
                 hasPrevPage:  products.hasPrevPage,
                 hasNextPage: products.hasNextPage , 
-                prevLink: products.hasPrevPage ? `${url}&page=${products.prevPage}` : null, 
-                nextLink: products.hasNextPage ? `localhost:8080/products${url}&page=${products.nextPage}` : null
+                prevLink: products.hasPrevPage ? '' : null, 
+                nextLink: products.hasNextPage ? '': null
             }
             
             return info

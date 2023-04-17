@@ -10,8 +10,7 @@ router.get('/', async (req, res) => {
     const {limit=10, page=1, sort={},...query} = req.query
     
     try {
-        const url = req.url
-        const products = await productManager.getProducts(limit, page, query, sort, url)
+        const products = await productManager.getProducts(limit, page, query, sort)
         res.status(200).json({products})
         
     } catch(error) {
