@@ -31,7 +31,7 @@ class CartManager {
     async getCartById(cartId) {
         
         try {
-            const cart = await cartsModel.findById(cartId)
+            const cart = await cartsModel.findById(cartId).populate('products.product')
             
             if(cart) {
                 return cart

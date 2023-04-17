@@ -5,6 +5,17 @@ import CartManager from '../dao/cartManagerMongo.js '
 const cartManager = new CartManager()
 const router = Router()
 
+router.get('/:cid', async (req, res) => {
+    const {cid} = req.params
+        
+    try {
+        const cart = await cartManager.getCartById(cid) 
+        res.status(200).json(cart)
+    } catch(error) {
+        res.status(error.code).json({error: error.message})
+    } 
+
+})
 
 router.post('/', async (req, res) => {
 
@@ -18,24 +29,56 @@ router.post('/', async (req, res) => {
     
 })
 
-router.get('/:cid', async (req, res) => {
-    const {cid} = req.params
-        
-    try {
-        const cart = await cartManager.getCartById(cid) 
-        res.status(200).json(cart)
-    } catch(error) {
-        res.status(error.code).json({error: error.message})
-    } 
-
-})
-
 router.post('/:cid/products/:pid', async (req, res) => {
     const {cid, pid} = req.params
     
     try {
         const cart = await cartManager.addProductToCart(cid, pid) 
         res.status(201).json({'message': 'Product added successfully', cart})
+    } catch(error) {
+        res.status(400).json({error: error.message})
+    } 
+
+})
+
+router.put('/:cid', async (req, res) => {
+    const {cid} = req.params
+    
+    try {
+        
+    } catch(error) {
+        res.status(400).json({error: error.message})
+    } 
+
+})
+
+router.put('/:cid/products/:pid', async (req, res) => {
+    const {cid, pid} = req.params
+    
+    try {
+        
+    } catch(error) {
+        res.status(400).json({error: error.message})
+    } 
+
+})
+
+router.delete('/:cid/products/:pid', async (req, res) => {
+    const {cid, pid} = req.params
+    
+    try {
+        
+    } catch(error) {
+        res.status(400).json({error: error.message})
+    } 
+
+})
+
+router.delete('/:cid', async (req, res) => {
+    const {cid} = req.params
+    
+    try {
+        
     } catch(error) {
         res.status(400).json({error: error.message})
     } 
