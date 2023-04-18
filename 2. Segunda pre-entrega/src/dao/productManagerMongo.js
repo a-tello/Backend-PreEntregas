@@ -62,7 +62,6 @@ export default class ProductManager {
             const updatedProduct = await productsModel.findByIdAndUpdate(productId, productValues)
             return await productsModel.findById(productId)
         } catch(err) {
-            err.message = 'Can not update product. Check ID or fields.'
             err.code = 400
             throw err
         }
@@ -73,7 +72,6 @@ export default class ProductManager {
         try {
             await productsModel.findByIdAndDelete(productId)
         } catch(err) {
-            err.message = 'Cannot delete product'
             err.code = 400
             throw err
         }
