@@ -5,9 +5,9 @@ import './db/dbConfig.js'
 import productsRouter from './routes/products.router.js'
 import cartsRouter from './routes/carts.router.js'
 import chatRouter from './routes/chat.router.js'
+import viewsRouter from './routes/views.router.js'
 import { Server } from 'socket.io'
 import MessageManager from './dao/messagesManagerMongo.js'
-import { messagesModel } from './db/models/messages.model.js'
 
 const PORT = 8080
 const app = express()
@@ -24,6 +24,7 @@ app.set('view engine', 'handlebars')
 app.use('/products', productsRouter)
 app.use('/carts', cartsRouter)
 app.use('/chat', chatRouter)
+app.use('/views', viewsRouter)
 
 
 
