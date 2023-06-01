@@ -21,6 +21,10 @@ const usersSchema =  new mongoose.Schema({
     age: {
         type: Number,
         require: true
+    },
+    cart: {
+        type: Number,
+        require: true
     }
 })
 
