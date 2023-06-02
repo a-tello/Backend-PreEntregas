@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import ProductManager from '../DAL/productManagerMongo.js'
-import CartManager from '../DAL/cartManagerMongo.js'
+import ProductManager from '../DAL/DAO/productManagerMongo.js'
+import CartManager from '../DAL/DAO/cartManagerMongo.js'
 import { getProducts } from '../services/products.services.js'
 
 const router = Router()
@@ -11,7 +11,7 @@ router.get('/products', async (req, res) => {
     const {limit=10, page=1, sort=null, code=null, ...query} = req.query
     
     try {
-        const products = await getProducts(limit, page, query, sort)
+        const products = await getProducts(limit, page, query, sort);
         res.render('products',{style:'products.css', products:products.payload, user:req.user})
         
     } catch(error) {
@@ -57,6 +57,7 @@ router.get('/profile',  (req, res) => {
         res.redirect('/views/login')
         return
     }
+    console.log(req.user);
     res.render('profile', {user:req.user})
 })
 

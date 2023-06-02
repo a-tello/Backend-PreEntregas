@@ -1,26 +1,29 @@
-import UserManager from "../DAL/userManager.js"
+import UserManager from "../DAL/DAO/userManager.js"
+import CartManager from "../DAL/DAO/cartManagerMongo.js"
+import UsersRes from "../DAL/DTOs/usersRes.js"
 import { hashData, compareData} from "../utils.js"
 import config from '../config.js'
-import CartManager from "../DAL/cartManagerMongo.js"
 
 const userAdmin = {
     _id:999, 
     firstName: 'Admin', 
     lastName: '-', 
     age: '-', 
-    email: 'adminCoder@coder.com', 
-    password: 'adminCod3r123', 
+    email: config.admin_email, 
+    password: config.admin_password, 
     role: 'Administrador'
 }
 
 const userManager = new UserManager()
 const cartManager = new CartManager()
 
+
 export const getUserById = async (id) => {
     try {
         if(id === 999) return userAdmin
         const user = await userManager.getUserById(id)
-        return user
+        const userRes = new UsersRes(user)
+        return userRes
     } catch (error) {
         
     }
@@ -28,8 +31,9 @@ export const getUserById = async (id) => {
 
 export const getUser = async (query) => {
     try {
-        const user =await userManager.getUser(query)
-        return user
+        const user = await userManager.getUser(query)
+        const userRes = new UsersRes(user)
+        return userRes
     } catch (error) {
         
     }

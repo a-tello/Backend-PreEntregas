@@ -1,5 +1,5 @@
-import CartManager from "../DAL/cartManagerMongo.js"
-import ProductManager from "../DAL/productManagerMongo.js"
+import CartManager from "../DAL/DAO/cartManagerMongo.js"
+import ProductManager from "../DAL/DAO/productManagerMongo.js"
 
 const cartManager =  new CartManager()
 

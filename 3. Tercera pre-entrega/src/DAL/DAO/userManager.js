@@ -1,4 +1,4 @@
-import { userModel } from "./models/users.model.js";
+import { userModel } from "../mongoDB/models/users.model.js";
 
 export default class UserManager {
    
