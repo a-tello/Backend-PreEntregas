@@ -5,8 +5,10 @@ import './DAL/mongoDB/dbConfig.js'
 // import para test
 import ProductsManager from "./DAL/DAOs/products/productsMongo.js"
 import UsersManager from "./DAL/DAOs/users/usersMongo.js"
+import CartManager from "./DAL/DAOs/carts/cartsMongo.js"
 const productsManager = new ProductsManager()
 const usersManager = new UsersManager()
+const cartManager = new CartManager()
 
 
 const PORT = config.port
@@ -74,6 +76,34 @@ app.post('/createUser', async (req, res) => {
     const newUser = await usersManager.createOne(userData)
     res.json(newUser)
 })
+//--------------------------------------------------------
+
+app.post('/createCart', async (req, res) => {
+    const cart = await cartManager.createOne([])
+    res.json({cart})
+})
+
+app.get('/getCart/:cid', async (req, res) => {
+    const { cid } = req.params
+    const cart = await cartManager.getCart(cid)
+    res.json({cart})
+})
+
+app.post('/addProduct/:cid/product/:pid', async (req, res) => {
+    const { cid, pid } = req.params
+    const cart = await cartManager.addProductToCart(cid, pid)
+    res.json({cart})
+})
+
+
+
+
+
+
+
+
+
+
 // FIN TEST
 
 

@@ -1,8 +1,7 @@
-import { cartsModel } from './models/carts.model.js'
+import { cartsModel } from '../../mongoDB/models/carts.model.js'
 
 class CartManager {
-
-    async addCart (products) {
+    async createOne (products) {
         try {
             return await cartsModel.create({products}) 
         } catch(err) {
@@ -14,7 +13,7 @@ class CartManager {
 
     async getCart(args) {
         try {
-            return await cartsModel.find(args) 
+            return await cartsModel.find({args}) 
         } catch {
             const error = new Error('Carts not found')
             error.code = 404 
