@@ -111,3 +111,8 @@ nav {
 .product-cart-button:foucs {
     background-color: rgb(9, 97, 9);
 }
+
+.logos {
+    display:flex;
+    gap:10px
+}

@@ -48,17 +48,21 @@ export const addProductToCart = async (cartId, productId) => {
     const productManager = new ProductManager()
     
     try{
+        let cart
         await productManager.getProductById(productId)
         await cartManager.getCartById(cartId)
         const existsProductInCart = await cartManager.getCart({_id: cartId, "products.product": productId})
+        console.log(existsProductInCart);
 
-        if(existsProductInCart) {
-            const cart = await cartManager.addProductToCart({_id:cartId, "products.product":productId},
+        if(existsProductInCart.length) {
+            cart = await cartManager.addProductToCart({_id:cartId, "products.product":productId},
             {$inc:{"products.$.quantity":1}})
+            console.log(cart);
         } else {
-            const cart = await cartManager.addProductToCart({_id:cartId},
+            cart = await cartManager.addProductToCart({_id:cartId},
             {$push:{
                 "products":{product: productId, quantity:1}}})
+                console.log(cart);
         }
         return cart
     } catch(err) {

@@ -25,6 +25,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
 
 
+
 app.use(
     session({
         secret: 'sessionKey',
@@ -35,7 +36,8 @@ app.use(
         })
     })
 )
-
+app.use(passport.initialize())
+app.use(passport.session())
  
 app.use(express.static(__dirname + '/public'))
 
@@ -43,8 +45,6 @@ app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
 
-app.use(passport.initialize())
-app.use(passport.session())
 
 
 app.get('/', (req, res) => {

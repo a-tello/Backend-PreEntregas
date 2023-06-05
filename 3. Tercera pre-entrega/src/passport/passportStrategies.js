@@ -3,6 +3,7 @@ import { Strategy as LocalStrategy} from 'passport-local'
 import { Strategy as GitHubStrategy} from 'passport-github2'
 import { createUser, getUserById, loginUser } from '../services/users.services.js'
 import config from '../config.js'
+import UsersRes from '../DAL/DTOs/usersRes.js'
 
 
 passport.use('login', new LocalStrategy(
@@ -12,7 +13,12 @@ passport.use('login', new LocalStrategy(
     }, async (req, email, password, done) => {
 
         const user = await loginUser(req.body)
-        return user ? done(null, user) : done(null, false)
+        
+        if(!user) return done(null, false)
+        const userRes = new UsersRes(user)
+        req.user = userRes
+        console.log('passport:',req.user);
+        done(null, user)
 
     }
 )) 

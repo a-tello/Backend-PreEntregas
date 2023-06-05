@@ -1,4 +1,5 @@
 import { addCart, addProductToCart, getCartById, addProductsToCart, updateProductQuantityFromCart, deleteProductFromCart, clearCart } from "../services/carts.services.js"
+import { generateTicket } from "./tickets.controller.js"
 
 export const getOneCart = async (req, res) => {
     const {cid} = req.params
@@ -86,4 +87,9 @@ export const emptyCart = async (req, res) => {
         res.status(400).json({error: error.message})
     } 
 
+}
+
+export const buyCart = async (req, res) => {
+    
+    await generateTicket(req)
 }

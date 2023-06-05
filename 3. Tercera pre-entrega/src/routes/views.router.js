@@ -57,7 +57,6 @@ router.get('/profile',  (req, res) => {
         res.redirect('/views/login')
         return
     }
-    console.log(req.user);
     res.render('profile', {user:req.user})
 })
 
