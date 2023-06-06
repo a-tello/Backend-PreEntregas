@@ -1,5 +1,5 @@
-import { addCart, addProductToCart, getCartById, addProductsToCart, updateProductQuantityFromCart, deleteProductFromCart, clearCart } from "../services/carts.services.js"
-import { generateTicket } from "./tickets.controller.js"
+import { addCart, addProductToCart, checkProducts, getCartById, addProductsToCart, updateProductQuantityFromCart, deleteProductFromCart, clearCart } from "../services/carts.services.js"
+import { createTicket } from "../services/ticket.services.js"
 
 export const getOneCart = async (req, res) => {
     const {cid} = req.params
@@ -89,6 +89,9 @@ export const emptyCart = async (req, res) => {
 
 }
 
-export const buyCart =  async (req,res) => {
-    await generateTicket(res)
+export const purchase =  async (req,res) => {
+    const cart = req.user.cart
+    const availableProducts = await checkProducts(cart)
+    const ticket = await createTicket(req.user, availableProducts )
+    res.send(`Compra realizada bajo el ticket ${ticket}`)
 }

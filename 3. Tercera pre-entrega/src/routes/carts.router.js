@@ -1,11 +1,11 @@
 import { Router } from 'express'
-import { addEmptyCart, addOneProductToCart, addProducts, buyCart, deleteProduct, emptyCart, getOneCart, updateProductsFromCart } from '../controllers/carts.controller.js'
+import { addEmptyCart, addOneProductToCart, addProducts, deleteProduct, emptyCart, getOneCart, purchase, updateProductsFromCart } from '../controllers/carts.controller.js'
 import { isAuthenticated } from '../passport/passportStrategies.js'
 
 const router = Router()
 
 router.get('/:cid', getOneCart)
-router.get('/:cid/purchase', isAuthenticated, buyCart)
+router.get('/:cid/purchase', isAuthenticated, purchase)
 router.post('/', addEmptyCart)
 router.post('/:cid/product/:pid', addOneProductToCart)
 router.put('/:cid', addProducts)

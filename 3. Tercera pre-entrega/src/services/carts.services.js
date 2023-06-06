@@ -98,8 +98,9 @@ export const updateProductQuantityFromCart = async(cartId, productId, newQuantit
 export const deleteProductFromCart = async (cartId, productId) => {
 
     try {
-        await this.getCartById(cartId) 
-        const cart = await cartManager.deleteProductFromCart({_id:cartId}, {"$pull":{"products":{"product":productId}}})
+        await getCartById(cartId)
+        const cart = await cartManager.deleteProductFromCart(cartId,productId)
+        console.log({cart});
         return cart
     } catch (err) {
         throw err
@@ -113,5 +114,40 @@ export const clearCart = async (cartId) => {
         await cartsModel.updateOne({_id:cartId}, {"$pull":{"products":{}}})
     } catch (err) {
         throw err
+    }
+}
+
+export const checkProducts = async (cartId) => {
+    const cart = await getCartById(cartId)
+    const availableProducts = await checkStock(cart.products)
+    console.log({availableProducts});
+    await updateProductsFromCart(cartId, availableProducts) 
+    return availableProducts
+}
+
+export const checkStock = async (products) => {
+    try {
+        const productManager =  new ProductManager()
+        const availableProducts = []  
+        
+        for (const cartProduct of products) {
+            const { product, quantity } = cartProduct
+            const productDB = await productManager.getProductById(product._id)
+
+            if(productDB.stock > quantity) {
+                const updatedStock = productDB.stock - quantity
+                await productManager.updateProduct(productDB._id, {stock: updatedStock})
+                availableProducts.push(cartProduct) 
+            }
+        }
+        return availableProducts
+    } catch (err) {
+        throw err
+    }
+}
+
+export const updateProductsFromCart = async (cartId, products) => {
+    for (const product of products) {
+        await deleteProductFromCart(cartId, product.product._id)
     }
 }

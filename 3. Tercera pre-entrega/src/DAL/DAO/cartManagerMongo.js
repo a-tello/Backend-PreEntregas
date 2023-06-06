@@ -84,7 +84,7 @@ class CartManager {
     async deleteProductFromCart(cartId, productId) {
 
         try {
-            const cart = await cartsModel.updateOne(cartId, productId, {new: true})
+            const cart = await cartsModel.updateOne({_id:cartId}, {"$pull":{"products":{"product":productId}}}, {new:true})
             return cart
         } catch (err) {
             throw err

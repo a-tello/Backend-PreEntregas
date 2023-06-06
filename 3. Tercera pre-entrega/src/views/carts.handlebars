@@ -21,7 +21,7 @@
             </div>  
         </div>
     {{/each}}
-    <button class="back-profile-btn" onclick="location.href='/views/ticket'">Volver al inicio</button>
+    <button class="back-profile-btn" onclick="location.href='{{link_purchase '/api/carts/' cart._id}}'">Comprar</button>
     </div>
     {{else}}
     <h2>No hay productos para mostrar.</h2>

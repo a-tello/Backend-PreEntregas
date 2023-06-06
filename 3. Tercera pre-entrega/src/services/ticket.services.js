@@ -1,33 +1,28 @@
 import TicketManager from "../DAL/DAO/ticketManager.js"
-import { getCartById } from "./carts.services.js"
 
 const ticketManager = new TicketManager()
 
 
-export const createTicket = async (data) => {
-    console.log('ticket:', data.local);
+export const createTicket = async (user, products) => {
     const code = await generateTicketCode()
-    /* const products = await getCartById(data.user.cart)
     const amount = products.reduce((previous, current) => {
         return previous + current.quantity
       }, 0);    
-    
-    const purchaser = data.user.email */
-
-    /* const ticket = {
+    const purchaser = user.email
+    const ticket = {
         code,
         amount,
-        purchase_datetime: Date.now(),
+        purchase_datetime: new Date(),
         purchaser
     }
-    return await ticketManager.createOne(ticket) */
+    return await ticketManager.createOne(ticket)
 }
 
 const generateTicketCode = async () => {
-    const lastTicket = await ticketManager.findOne({limit:1})
-    console.log('lasticket:',lastTicket);
-    if(!lastTicket.length) return 'tckt001'
-
-    const newCode = parseInt(lastTicket.code.slice(4)) + 1
-    return newCode
+    const lastTicket = await ticketManager.findLast()
+    if(!lastTicket.length) {
+        return 'tckt0001'}
+    
+    const newNumCode = parseInt(lastTicket[0].code.slice(4)) + 1
+    return 'tckt' + newNumCode.toString().padStart(4, '0')
 }

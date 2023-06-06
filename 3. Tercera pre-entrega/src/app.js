@@ -1,28 +1,27 @@
 import express from 'express'
-import { __dirname } from './utils.js'
 import handlebars from 'express-handlebars'
-import './DAL/mongoDB/dbConfig.js'
 import config from './config.js'
+import { __dirname } from './utils.js'
+import './DAL/mongoDB/dbConfig.js'
+
 import productsRouter from './routes/products.router.js'
 import cartsRouter from './routes/carts.router.js'
 import chatRouter from './routes/chat.router.js'
 import viewsRouter from './routes/views.router.js'
 import usersRouter from './routes/users.router.js'
 import sessionsRouter from './routes/sessions.router.js'
+
 import { Server } from 'socket.io'
 import MessageManager from './DAL/DAO/messagesManagerMongo.js'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import mongoStore from 'connect-mongo'
-import './passport/passportStrategies.js'
 import passport from 'passport'
-import { addProductToCart } from './services/carts.services.js'
+import './passport/passportStrategies.js'
 
 
 const PORT = config.port
 const app = express()
-
-
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
@@ -33,7 +32,8 @@ app.use(express.static(__dirname + '/public'))
 app.engine('handlebars', handlebars.engine(
     {
         helpers:{
-            link: (url, variable) => `${url}${variable}`
+            link: (url, variable) => `${url}${variable}`,
+            link_purchase: (url, variable) => `${url}${variable}/purchase`
         }
     }))
 app.set('views', __dirname + '/views')
@@ -53,7 +53,6 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
- 
 app.get('/', (req, res) => {
     res.redirect('/views/login')
 })
