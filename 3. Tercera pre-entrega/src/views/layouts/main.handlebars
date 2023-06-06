@@ -19,13 +19,5 @@
 </head>
 <body>
     {{{body}}}
-    <script type="text/javascript">
-    Handlebars.registerHelper("link", function(text, url) {
-    url = Handlebars.escapeExpression(url),
-    text = Handlebars.escapeExpression(text)
-          
-     return new Handlebars.SafeString(url + text);
-})
-</script>
 </body>
 </html>
