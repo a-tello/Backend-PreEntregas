@@ -2,6 +2,7 @@ import { Router } from 'express'
 import ProductManager from '../DAL/DAO/productManagerMongo.js'
 import CartManager from '../DAL/DAO/cartManagerMongo.js'
 import { getProducts } from '../services/products.services.js'
+import { isAuthenticated } from '../passport/passportStrategies.js'
 
 const router = Router()
 const productManager = new ProductManager
@@ -12,6 +13,7 @@ router.get('/products', async (req, res) => {
     
     try {
         const products = await getProducts(limit, page, query, sort);
+        console.log(req.user);
         res.render('products',{style:'products.css', products:products.payload, user:req.user})
         
     } catch(error) {
@@ -32,7 +34,7 @@ router.get('/carts/:cid', async (req, res) => {
 
 })
 
-router.get('/login',  (req, res) => {
+router.get('/login', (req, res) => {
     if(req.session?.passport) {
         return res.redirect('/views/products')
     }
@@ -52,12 +54,17 @@ router.get('/signup',  (req, res) => {
     res.render('signup')
 })
 
-router.get('/profile',  (req, res) => {
+router.get('/profile', (req, res) => {
+    console.log('req.user',req.user);
     if(!req.user?.email) {
         res.redirect('/views/login')
         return
     }
     res.render('profile', {user:req.user})
+})
+
+router.get('/ticket',  (req, res) => {
+    console.log(req.isAuthenticated());
 })
 
 router.get('/error',  (req, res) => {

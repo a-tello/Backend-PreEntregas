@@ -13,13 +13,7 @@ passport.use('login', new LocalStrategy(
     }, async (req, email, password, done) => {
 
         const user = await loginUser(req.body)
-        
-        if(!user) return done(null, false)
-        const userRes = new UsersRes(user)
-        req.user = userRes
-        console.log('passport:',req.user);
         done(null, user)
-
     }
 )) 
 
@@ -56,13 +50,18 @@ passport.use('github', new GitHubStrategy({
     )
 
 
-  passport.serializeUser((user, done) => {
-    done(null, user._id)
-  })
+export const isAuthenticated = (req,res,next) => {
+    console.log('AUTHENTICATED',req.isAuthenticated());
+    if(req.isAuthenticated()) return next()
+    res.redirect('/')
+}
 
-  passport.deserializeUser( async(userId, done) => {
-    const user = await getUserById(userId)
-    done(null, user)
+passport.serializeUser((user, done) => {
+done(null, user._id)
+})
 
-  })
-  
+passport.deserializeUser( async(userId, done) => {
+const user = await getUserById(userId)
+done(null, user)
+
+})

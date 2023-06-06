@@ -13,8 +13,10 @@ router.post('/signup', passport.authenticate('signup', {
 router.post('/login', passport.authenticate('login', {
     failureRedirect: '/views/error',
     failureMessage: 'Usuario o contraseña incorrectos',
-    successRedirect: '/views/products'  
-}))
+    //successRedirect: '/views/products'  
+}),(req,res) => {
+    res.redirect('/views/products')
+})
 
 router.get('/signup/github',passport.authenticate('github', { scope: [ 'user:email' ] }));
 router.get('/github',  passport.authenticate('github', {

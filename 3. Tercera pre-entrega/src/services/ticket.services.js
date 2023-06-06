@@ -5,7 +5,7 @@ const ticketManager = new TicketManager()
 
 
 export const createTicket = async (data) => {
-    console.log('ticket:', data.session);
+    console.log('ticket:', data.local);
     const code = await generateTicketCode()
     /* const products = await getCartById(data.user.cart)
     const amount = products.reduce((previous, current) => {

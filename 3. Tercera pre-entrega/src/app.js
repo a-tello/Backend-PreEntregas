@@ -16,14 +16,28 @@ import session from 'express-session'
 import mongoStore from 'connect-mongo'
 import './passport/passportStrategies.js'
 import passport from 'passport'
+import { addProductToCart } from './services/carts.services.js'
+
 
 const PORT = config.port
 const app = express()
+
+
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
 
+app.use(express.static(__dirname + '/public'))
+
+app.engine('handlebars', handlebars.engine(
+    {
+        helpers:{
+            link: (url, variable) => `${url}${variable}`
+        }
+    }))
+app.set('views', __dirname + '/views')
+app.set('view engine', 'handlebars')
 
 
 app.use(
@@ -38,15 +52,8 @@ app.use(
 )
 app.use(passport.initialize())
 app.use(passport.session())
+
  
-app.use(express.static(__dirname + '/public'))
-
-app.engine('handlebars', handlebars.engine())
-app.set('views', __dirname + '/views')
-app.set('view engine', 'handlebars')
-
-
-
 app.get('/', (req, res) => {
     res.redirect('/views/login')
 })

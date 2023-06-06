@@ -5,6 +5,7 @@ export default class UsersRes {
         this.lastName = user.lastName
         this.age = user.age
         this.email = user.email 
+        this.cart = user.cart.toString()
         this.role = user.role
     }
 }

@@ -89,7 +89,6 @@ export const emptyCart = async (req, res) => {
 
 }
 
-export const buyCart = async (req, res) => {
-    
-    await generateTicket(req)
+export const buyCart =  async (req,res) => {
+    await generateTicket(res)
 }
