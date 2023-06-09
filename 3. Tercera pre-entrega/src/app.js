@@ -17,6 +17,7 @@ import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import mongoStore from 'connect-mongo'
 import passport from 'passport'
+import cors from 'cors'
 import './passport/passportStrategies.js'
 
 
@@ -26,6 +27,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
+app.use(cors())
 
 app.use(express.static(__dirname + '/public'))
 

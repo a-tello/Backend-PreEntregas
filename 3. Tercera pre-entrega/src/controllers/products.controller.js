@@ -25,7 +25,7 @@ export const getOneProductById = async (req, res) => {
 
 export const addOneProduct = async (req, res) => {
     const product = req.body
-        
+    
     try {
         await addProduct(product)
         res.status(201).json({'message': 'Product created', 'product': product})

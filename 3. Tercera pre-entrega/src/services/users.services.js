@@ -3,14 +3,16 @@ import CartManager from "../DAL/DAO/cartManagerMongo.js"
 import UsersRes from "../DAL/DTOs/usersRes.js"
 import { hashData, compareData} from "../utils.js"
 import config from '../config.js'
+import { generateToken } from "../jwt.utils.js"
 
 const userAdmin = {
-    _id:999, 
-    firstName: 'Admin', 
-    lastName: '-', 
-    age: '-', 
+    _id:0, 
+    firstName: ' ', 
+    lastName: 'Admin', 
+    age: '', 
     email: config.admin_email, 
-    password: config.admin_password, 
+    password: config.admin_password,
+    cart:'', 
     role: 'Administrador'
 }
 
@@ -42,7 +44,7 @@ export const getUser = async (query) => {
 export const createUser = async (user) => {
     try {
         const {email, password} = user
-        const userExists = await userManager.getUser({email})
+        const userExists = await userManager.getUser(email)
     
         if(userExists.length !== 0) {
             return null
@@ -58,12 +60,20 @@ export const createUser = async (user) => {
     }
 }
 
-export const loginUser = async (userData) => {
+export const login = async (userData) => {
     const {email, password} = userData
-    if(await isAdmin(email,password)) return userAdmin
 
-    const user = await userManager.getUser({email})
-    return (user.length !== 0 && await compareData(password, user[0].password)) ? {...user[0]} :  null
+    if(await isAdmin(email,password)) return generateToken({userRes: new UsersRes(userAdmin)})
+
+    const user = await userManager.getUser({email}) 
+
+    if(user.length !== 0 && await compareData(password, user[0].password)) {
+    
+        const userRes = new UsersRes(...user)
+        const token = generateToken({userRes})
+        return token
+    }
+    return null
 }
 
 const isAdmin = async (email, password) => {

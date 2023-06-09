@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { logoutUser } from '../controllers/users.controller.js'
+import { loginUser, logoutUser } from '../controllers/users.controller.js'
 import passport from "passport"
 
 const router = Router()
@@ -10,13 +10,15 @@ router.post('/signup', passport.authenticate('signup', {
     successRedirect: '/views/login',
     session:false
 }))
-router.post('/login', passport.authenticate('login', {
+/* router.post('/login', passport.authenticate('login', {
     failureRedirect: '/views/error',
     failureMessage: 'Usuario o contraseña incorrectos',
-    //successRedirect: '/views/products'  
+    successRedirect: '/views/products'  
 }),(req,res) => {
     res.redirect('/views/products')
-})
+}) */
+router.post('/login', loginUser)
+
 
 router.get('/signup/github',passport.authenticate('github', { scope: [ 'user:email' ] }));
 router.get('/github',  passport.authenticate('github', {

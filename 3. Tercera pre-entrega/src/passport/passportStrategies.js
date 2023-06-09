@@ -1,12 +1,12 @@
 import passport from 'passport'
 import { Strategy as LocalStrategy} from 'passport-local'
 import { Strategy as GitHubStrategy} from 'passport-github2'
-import { createUser, getUserById, loginUser } from '../services/users.services.js'
+import { createUser, getUserById } from '../services/users.services.js'
 import config from '../config.js'
 import UsersRes from '../DAL/DTOs/usersRes.js'
 
 
-passport.use('login', new LocalStrategy(
+/* passport.use('login', new LocalStrategy(
     {
         usernameField: 'email',
         passReqToCallback: true 
@@ -27,7 +27,7 @@ passport.use('signup', new LocalStrategy(
         return newUser ? done(null, newUser) : done(null, false)
         
     }
-)) 
+))  */
 
 passport.use('github', new GitHubStrategy({
         clientID: config.github_clientID,
