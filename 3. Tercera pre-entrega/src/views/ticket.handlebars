@@ -1,0 +1,33 @@
+<div class="container">
+    {{#with data}}
+    {{#if cart.length}}
+    <h1 class="title">Compra realizada con éxito</h1>
+    <span>Compra realizada bajo el numero de ticket: {{ticket.code}}</span>
+    
+    <div class='cart-container'>
+    {{#each cart}}
+        <div class='cart-item'>
+            <div class="cart-img-item-container">
+                <img src={{product.thumbnail}} alt={{product.title}}>
+            </div>
+            <div class="row-1">
+                <h3 class="cart-product-title">{{product.title}}</h3>
+                <span class="cart-product-id">ID: {{product._id}}</span>
+                <span class="cart-product-category">*{{product.category}}</span>
+            </div>
+            <div class="row-2">
+                <span class="cart-product-price">${{product.price}}</span>
+            </div>  
+            <div class="row-3">
+                <span class="cart-product-quantity">Cantidad: {{quantity}}</span>
+            </div>  
+        </div>
+    {{/each}}
+    <button class="back-profile-btn" onclick="location.href='/views/products'">Volver al inicio</button>
+    </div>
+    {{else}}
+    <h2>No hay productos para mostrar.</h2>
+    <button class="back-profile-btn" onclick="location.href='/views/products'">Volver al inicio</button>
+    {{/if}}
+    {{/with}}
+</div>
