@@ -27,7 +27,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
-app.use(cors())
+app.use(cors({origin:'localhost:8080',allowedHeaders:true}))
 
 app.use(express.static(__dirname + '/public'))
 

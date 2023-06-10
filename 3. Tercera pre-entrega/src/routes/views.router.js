@@ -7,7 +7,7 @@ import { jwtValidator } from '../middleware/jwt.middleware.js'
 const router = Router()
 const cartManager = new CartManager
 
-router.get('/products', jwtValidator, async (req, res) => {
+router.get('/products',jwtValidator, async (req, res) => {
     const {limit=10, page=1, sort=null, code=null, ...query} = req.query
     
     try {
@@ -24,7 +24,7 @@ router.get('/carts/:cid', async (req, res) => {
     const {cid} = req.params
         
     try {
-        const cart = await cartManager.getCartById(cid) 
+        const cart = await cartManager.getCartById(cid)
         res.render('carts',{style:'cart.css', cart:cart})
     } catch(error) {
         res.status(error.code).json({error: error.message})
@@ -32,7 +32,7 @@ router.get('/carts/:cid', async (req, res) => {
 
 })
 
-router.get('/login', jwtValidator, (req, res) => {
+router.get('/login', (req, res) => {
     if(req.user?.isLogged) {
         return res.redirect('/views/products')
     }
@@ -42,7 +42,7 @@ router.get('/login', jwtValidator, (req, res) => {
     res.render('login')
 })
 
-router.get('/signup', jwtValidator, (req, res) => {
+router.get('/signup', (req, res) => {
     if(req.user?.email) {
         return res.redirect('/views/products')
     }
@@ -69,7 +69,9 @@ router.get('/error',  (req, res) => {
     if(req.user?.email) {
         res.redirect('/views/products')
     }
-    res.render('error', {err: 'Usuario Invalido'})
+    const error = req.cookies.error
+    res.clearCookie('error')
+    res.render('error', {err: error})
 })
 
 

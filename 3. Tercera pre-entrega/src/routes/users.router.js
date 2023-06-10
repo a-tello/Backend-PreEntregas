@@ -1,24 +1,12 @@
 import { Router } from "express"
-import { loginUser, logoutUser } from '../controllers/users.controller.js'
+import { loginUser, logoutUser, singUpUser } from '../controllers/users.controller.js'
 import passport from "passport"
 
 const router = Router()
 
-router.post('/signup', passport.authenticate('signup', {
-    failureRedirect: '/views/error',
-    failureMessage: `El mail ya se encuentra registrado`,
-    successRedirect: '/views/login',
-    session:false
-}))
-/* router.post('/login', passport.authenticate('login', {
-    failureRedirect: '/views/error',
-    failureMessage: 'Usuario o contraseña incorrectos',
-    successRedirect: '/views/products'  
-}),(req,res) => {
-    res.redirect('/views/products')
-}) */
 router.post('/login', loginUser)
 
+router.post('/signup', singUpUser)
 
 router.get('/signup/github',passport.authenticate('github', { scope: [ 'user:email' ] }));
 router.get('/github',  passport.authenticate('github', {

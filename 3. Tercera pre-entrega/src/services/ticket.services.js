@@ -6,7 +6,8 @@ const ticketManager = new TicketManager()
 export const createTicket = async (user, products) => {
     const code = await generateTicketCode()
     const amount = products.reduce((previous, current) => {
-        return previous + current.quantity
+        const price = current.product.price * current.quantity
+        return previous + price
       }, 0);    
     const purchaser = user.email
     const ticket = {

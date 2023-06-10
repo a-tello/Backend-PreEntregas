@@ -93,5 +93,5 @@ export const purchase =  async (req,res) => {
     const cart = req.user.cart
     const availableProducts = await checkProducts(cart)
     const ticket = await createTicket(req.user, availableProducts )
-    res.send(`Compra realizada bajo el ticket ${ticket}`)
+    return res.render('ticket', {data: {ticket: ticket._doc, cart:availableProducts}})
 }

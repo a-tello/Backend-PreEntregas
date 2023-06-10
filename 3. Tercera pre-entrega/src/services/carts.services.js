@@ -52,17 +52,14 @@ export const addProductToCart = async (cartId, productId) => {
         await productManager.getProductById(productId)
         await cartManager.getCartById(cartId)
         const existsProductInCart = await cartManager.getCart({_id: cartId, "products.product": productId})
-        console.log(existsProductInCart);
 
         if(existsProductInCart.length) {
             cart = await cartManager.addProductToCart({_id:cartId, "products.product":productId},
             {$inc:{"products.$.quantity":1}})
-            console.log(cart);
         } else {
             cart = await cartManager.addProductToCart({_id:cartId},
             {$push:{
                 "products":{product: productId, quantity:1}}})
-                console.log(cart);
         }
         return cart
     } catch(err) {
@@ -100,7 +97,6 @@ export const deleteProductFromCart = async (cartId, productId) => {
     try {
         await getCartById(cartId)
         const cart = await cartManager.deleteProductFromCart(cartId,productId)
-        console.log({cart});
         return cart
     } catch (err) {
         throw err
@@ -120,7 +116,6 @@ export const clearCart = async (cartId) => {
 export const checkProducts = async (cartId) => {
     const cart = await getCartById(cartId)
     const availableProducts = await checkStock(cart.products)
-    console.log({availableProducts});
     await updateProductsFromCart(cartId, availableProducts) 
     return availableProducts
 }

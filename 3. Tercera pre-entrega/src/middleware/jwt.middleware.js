@@ -2,31 +2,47 @@ import jwt from "jsonwebtoken"
 import config from "../config.js"
 
 export const jwtValidator = (req, res, next) => {
-    const token = req.cookies.token
-    console.log(req.cookies);
-    console.log({token});
-    if(!token) return next()
-    const validateUser = jwt.verify(token, config.secretKeyTkn)
+    try {
+        const token = req.cookies.Authorization
+        const validateUser = jwt.verify(token, config.secretKeyTkn)
 
-    if(validateUser) {
-        req.user = {...validateUser.userRes, isLogged:true}
-        next()
+        if(validateUser) {
+            req.user = {...validateUser, isLogged:true}
+            return next()
+        } 
+    } catch (error) {
+        res.status(401).json(error);
     }
 }
 
 export const verifyTokenAdmin = (req, res, next) => {
     try {
-        const token = req.cookies.token;
-        const decoded = verifyToken(token);
-        if (!decoded) {
-            return res.status(401).json("Unauthorized");
+        const authHeader = req.get('Authorization')
+        const token = authHeader.split(' ')[1]
+        const validateUser = jwt.verify(token, config.secretKeyTkn)
+
+        if(validateUser.isAdmin){
+            next()
+        } else {
+            throw new Error
         }
-        if (decoded.role !== "Administrador") {
-            return res.status(403).json("Forbidden");
-        }
-        req.user = decoded;
-        next();
     } catch (error) {
-        res.status(401).json("Unauthorized");
+        res.status(401).json({error: 'Unauthorized. Only admin'});
     }
-}
+} 
+
+export const verifyTokenUser = (req, res, next) => {
+    try {
+        const authHeader = req.get('Authorization')
+        const token = authHeader.split(' ')[1]
+        const validateUser = jwt.verify(token, config.secretKeyTkn)
+
+        if(!validateUser.isAdmin){
+            next()
+        } else {
+            throw new Error
+        }
+    } catch (error) {
+        res.status(401).json({error: 'Unauthorized. Only users'});
+    }
+} 

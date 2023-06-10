@@ -8,7 +8,7 @@ import { generateToken } from "../jwt.utils.js"
 const userAdmin = {
     _id:0, 
     firstName: ' ', 
-    lastName: 'Admin', 
+    lastName: ' ', 
     age: '', 
     email: config.admin_email, 
     password: config.admin_password,
@@ -44,7 +44,7 @@ export const getUser = async (query) => {
 export const createUser = async (user) => {
     try {
         const {email, password} = user
-        const userExists = await userManager.getUser(email)
+        const userExists = await userManager.getUser({email})
     
         if(userExists.length !== 0) {
             return null
@@ -63,19 +63,21 @@ export const createUser = async (user) => {
 export const login = async (userData) => {
     const {email, password} = userData
 
-    if(await isAdmin(email,password)) return generateToken({userRes: new UsersRes(userAdmin)})
+    if(await isAdmin(email,password)) {
+        const admin = new UsersRes(userAdmin)
+        return generateToken({...admin, isAdmin: true})
+    }
 
     const user = await userManager.getUser({email}) 
 
     if(user.length !== 0 && await compareData(password, user[0].password)) {
-    
         const userRes = new UsersRes(...user)
-        const token = generateToken({userRes})
+        const token = generateToken({...userRes, isAdmin: false})
         return token
     }
-    return null
-}
+    
 
+}
 const isAdmin = async (email, password) => {
     return email === config.admin_email && password === config.admin_password
 }
