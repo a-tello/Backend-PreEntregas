@@ -6,6 +6,7 @@ import './DAL/mongoDB/dbConfig.js'
 // ROUTERS
 import productRouter from "./routes/products.router.js"
 import cartRouter from "./routes/carts.router.js"
+import chatRouter from "./routes/chat.router.js"
 
 import handlebars from 'express-handlebars'
 
@@ -112,6 +113,7 @@ app.set('view engine', 'handlebars')
 
 app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
+app.use('/chat', chatRouter)
 
 app.listen(PORT,() => console.log(`Listen on port ${PORT}`))
     
