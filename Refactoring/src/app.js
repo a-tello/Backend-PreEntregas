@@ -1,11 +1,13 @@
 import express from "express"
 import config from "./config.js"
+import { __dirname } from "./utils.js"
 import './DAL/mongoDB/dbConfig.js'
 
 // ROUTERS
 import productRouter from "./routes/products.router.js"
 import cartRouter from "./routes/carts.router.js"
 
+import handlebars from 'express-handlebars'
 
 // import para test
 import ProductsManager from "./DAL/DAOs/products/productsMongo.js"
@@ -23,7 +25,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
      
 
-// INICIO TEST
+/* // INICIO TEST
 
 app.get('/getProduct/:id', async (req, res) => {
     try {
@@ -98,9 +100,15 @@ app.post('/addProduct/:cid/product/:pid', async (req, res) => {
     res.json({cart})
 })
 
+// FIN TEST */
 
+app.use(express.static(__dirname + '/public'))
 
-// FIN TEST
+//HANDLEBARS
+app.engine('handlebars', handlebars.engine)
+app.set('views', __dirname + '/views')
+app.set('view engine', 'handlebars')
+
 
 app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
