@@ -1,6 +1,7 @@
 import express from "express"
 import config from "./config.js"
 import './DAL/mongoDB/dbConfig.js'
+import productRouter from "./routes/products.router.js"
 
 // import para test
 import ProductsManager from "./DAL/DAOs/products/productsMongo.js"
@@ -20,15 +21,11 @@ app.use(express.urlencoded({extended:true}))
 
 // INICIO TEST
 
-app.get('/getProducts', async (req, res) => {
-    const products = await productsManager.getAll()
-    res.json(products)
-})
-
 app.get('/getProduct/:id', async (req, res) => {
     try {
         const {id} = req.params
         const product = await productsManager.getOneById(id)
+        if(!product) return res.json({error:`Product with ID ${id} not found`})
         res.json(product)
     } catch (err) {
         res.json(err)
@@ -36,7 +33,7 @@ app.get('/getProduct/:id', async (req, res) => {
     
 })
 
-app.post('/createProduct', async (req, res) => {
+app.post('/addProduct', async (req, res) => {
     const { ...product } = req.body
     const newProduct = await productsManager.createOne(product)
     res.json(newProduct)
@@ -46,12 +43,14 @@ app.put('/updateProduct/:id', async (req, res) => {
     const { id } = req.params
     const newData = req.body
     const updatedProduct = await productsManager.updateOne(id, newData)
+    if(!updatedProduct) return res.json({error:`Product with ID ${id} not found`})
     res.json({message:'Product updated successfully', updatedProduct})
 })
 
 app.delete('/deleteProduct/:id', async (req, res) => {
     const { id } = req.params
     const product = await productsManager.deleteOne(id)
+    if(!product) return res.json({error:`Product with ID ${id} not found`})
     res.json({message:'Product removed successfully', product})
 })
 //-----------------------------------------------------------------
@@ -97,18 +96,10 @@ app.post('/addProduct/:cid/product/:pid', async (req, res) => {
 
 
 
-
-
-
-
-
-
-
 // FIN TEST
 
-
-
-
+app.use('/api/products', productRouter)
+//app.use('/api/carts', )
 
 app.listen(PORT,() => console.log(`Listen on port ${PORT}`))
     

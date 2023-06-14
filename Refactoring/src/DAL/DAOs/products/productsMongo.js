@@ -1,9 +1,9 @@
 import { productsModel } from '../../mongoDB/models/products.model.js'
 
 export default class ProductsManager {
-    async getAll(){
+    async getAll(query, limit){
         try {
-            return await productsModel.find()
+            return await productsModel.find(query).limit(limit)
         } catch (err) {
             throw err
         }
