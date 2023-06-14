@@ -102,11 +102,10 @@ app.post('/addProduct/:cid/product/:pid', async (req, res) => {
 })
 
 // FIN TEST */
-
 app.use(express.static(__dirname + '/public'))
 
 //HANDLEBARS
-app.engine('handlebars', handlebars.engine)
+app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
 
@@ -115,5 +114,5 @@ app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 app.use('/chat', chatRouter)
 
-app.listen(PORT,() => console.log(`Listen on port ${PORT}`))
+export const httpServer = app.listen(PORT,() => console.log(`Listen on port ${PORT}`))
     
