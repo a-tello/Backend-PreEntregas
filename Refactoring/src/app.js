@@ -1,7 +1,11 @@
 import express from "express"
 import config from "./config.js"
 import './DAL/mongoDB/dbConfig.js'
+
+// ROUTERS
 import productRouter from "./routes/products.router.js"
+import cartRouter from "./routes/carts.router.js"
+
 
 // import para test
 import ProductsManager from "./DAL/DAOs/products/productsMongo.js"
@@ -99,7 +103,7 @@ app.post('/addProduct/:cid/product/:pid', async (req, res) => {
 // FIN TEST
 
 app.use('/api/products', productRouter)
-//app.use('/api/carts', )
+app.use('/api/carts', cartRouter)
 
 app.listen(PORT,() => console.log(`Listen on port ${PORT}`))
     

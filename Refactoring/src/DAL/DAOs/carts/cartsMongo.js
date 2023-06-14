@@ -5,7 +5,6 @@ class CartManager {
         try {
             return await cartsModel.create({products}) 
         } catch(err) {
-            err.code = 400
             throw err
         }
 
@@ -13,10 +12,9 @@ class CartManager {
 
     async getCart(args) {
         try {
-            return await cartsModel.find({args}) 
+            return await cartsModel.find(args) 
         } catch {
             const error = new Error('Carts not found')
-            error.code = 404 
             throw error
         }
     }
@@ -27,8 +25,6 @@ class CartManager {
             const carts = await cartsModel.find()
             return carts
         } catch {
-            const error = new Error('Carts not found')
-            error.code = 404 
             throw error
         }
     }
@@ -38,8 +34,6 @@ class CartManager {
             const cart = await cartsModel.findById(cartId).populate('products.product').lean()
             return cart
         } catch(err) {
-            err.message = `Cart with id ${cartId} not found`
-            err.code = 404
             throw err
         }
     }
@@ -61,7 +55,6 @@ class CartManager {
         } catch(err) {
             throw err
         }
-
     }
 
     async updateProductQuantityFromCart(cartId, product, newQuantity) {
