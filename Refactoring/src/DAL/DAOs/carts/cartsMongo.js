@@ -12,7 +12,7 @@ class CartManager {
 
     async getCart(args) {
         try {
-            return await cartsModel.find(args) 
+            return await cartsModel.find(args).populate('products.product').lean()
         } catch {
             const error = new Error('Carts not found')
             throw error
