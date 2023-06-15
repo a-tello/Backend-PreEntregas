@@ -1,9 +1,21 @@
 import { productsModel } from '../../mongoDB/models/products.model.js'
 
 export default class ProductsManager {
-    async getAll(query, limit){
+    async getAll(query, params){
         try {
-            return await productsModel.find(query).limit(limit)
+            const products = await productsModel.paginate(query, params)
+            return {
+                status: 'sucess',
+                payload: products.docs,
+                totalPages: products.totalPages,
+                prevPage: products.prevPage,
+                nextPage: products.nextPage,
+                page: products.page,
+                hasPrevPage: products.hasPrevPage,
+                hasNextPage: products.hasNextPage,
+                prevLink: `localhost:8080/products/`,
+                nextLink: `localhost:8080/products/`
+            }
         } catch (err) {
             throw err
         }

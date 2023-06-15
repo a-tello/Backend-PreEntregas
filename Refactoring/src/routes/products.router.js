@@ -5,9 +5,9 @@ const router = Router()
 const productsManager = new ProductsManager()
 
 router.get('/', async (req,res) => {
-    const {limit=undefined, ...query} = req.query
+    const {limit=10, page=1, sort={}, ...query} = req.query
     //const products = await productsManager.getAll({limit, page, sort: {price: sort}, lean:true, leanWithId: false})
-    const products = await productsManager.getAll(query, limit)
+    const products = await productsManager.getAll(query, {limit, page, sort:{price:sort}})
     res.json(products)
 } )
 
