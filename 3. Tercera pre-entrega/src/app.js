@@ -60,7 +60,7 @@ app.get('/', (req, res) => {
 })
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
-app.use('/api/chat', chatRouter)
+app.use('/chat', chatRouter)
 app.use('/views', viewsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/sessions', sessionsRouter)
