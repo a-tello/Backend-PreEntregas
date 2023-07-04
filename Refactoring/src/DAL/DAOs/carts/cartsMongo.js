@@ -10,7 +10,7 @@ class CartManager {
 
     }
 
-    async getCart(args) {
+    async getCart(args={}) {
         try {
             return await cartsModel.find(args).populate('products.product').lean()
         } catch {
@@ -19,7 +19,7 @@ class CartManager {
         }
     }
 
-    async getCarts() {
+    /* async getCarts() {
 
         try {
             const carts = await cartsModel.find()
@@ -27,7 +27,7 @@ class CartManager {
         } catch {
             throw error
         }
-    }
+    } */
 
     async getCartById(cartId) {
         try {
@@ -41,8 +41,7 @@ class CartManager {
 
     async addProductToCart(query, action) {        
         try{
-            const cart = cartsModel.findOneAndUpdate(query, action, {new: true})
-            return cart
+            return cartsModel.findOneAndUpdate(query, action, {new: true})
         } catch(err) {
             throw err
         }   
@@ -50,17 +49,18 @@ class CartManager {
 
     async addProductsToCart(cartId, products) {
         try{
-            const cart = await cartsModel.findOneAndUpdate(cartId, products, {new: true})
+            const cart = await cartsModel.findOneAndUpdate({_id:cartId}, {$push:{"products":{$each :products}}}, {new:true})
             return cart
         } catch(err) {
             throw err
         }
     }
 
-    async updateProductQuantityFromCart(cartId, product, newQuantity) {
+    async updateProductQuantityFromCart(cartId, productId, newQuantity) {
 
         try{
-            const cart = await cartsModel.updateOne(cartId, product, newQuantity, {new: true})
+            const cart = await cartsModel.findOneAndUpdate({_id:cartId, "products.product": productId}, {$set:{"products.$.quantity":newQuantity}}, {new:true})
+            //const cart = await cartsModel.updateOne({_id:cartId, "products.product": productId}, {quantity:newQuantity}, {new:true})
             return cart
         } catch(err) {
             throw err
@@ -70,17 +70,18 @@ class CartManager {
     async deleteProductFromCart(cartId, productId) {
 
         try {
-            const cart = await cartsModel.updateOne(cartId, productId, {new: true})
+            const cart = await cartsModel.findByIdAndUpdate({_id:cartId}, {"$pull":{"products":{"product":productId}}}, {new:true})
+            console.log(cart);
             return cart
         } catch (err) {
             throw err
         }
     }
 
-    async clearCart(cartId, field) {
+    async clearCart(cartId) {
         
         try {
-            await cartsModel.updateOne(cartId, field)
+            return await cartsModel.findOneAndUpdate({_id:cartId}, {"$pull":{"products":{}}}, {new:true})
         } catch (err) {
             throw err
         }

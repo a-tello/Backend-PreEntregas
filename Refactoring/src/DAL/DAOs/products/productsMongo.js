@@ -5,7 +5,7 @@ export default class ProductsManager {
         try {
             const products = await productsModel.paginate(query, params)
             return {
-                status: 'sucess',
+                status: 'success',
                 payload: products.docs,
                 totalPages: products.totalPages,
                 prevPage: products.prevPage,

@@ -7,6 +7,7 @@ import './DAL/mongoDB/dbConfig.js'
 import productRouter from "./routes/products.router.js"
 import cartRouter from "./routes/carts.router.js"
 import chatRouter from "./routes/chat.router.js"
+import viewsRouter from "./routes/views.router.js"
 
 import handlebars from 'express-handlebars'
 
@@ -104,15 +105,22 @@ app.post('/addProduct/:cid/product/:pid', async (req, res) => {
 // FIN TEST */
 app.use(express.static(__dirname + '/public'))
 
-//HANDLEBARS
-app.engine('handlebars', handlebars.engine())
+app.engine('handlebars', handlebars.engine(
+    {
+        helpers:{
+            link: (url, variable) => `${url}${variable}`,
+            link_purchase: (url, variable) => `${url}${variable}/purchase`
+            
+        }
+    }
+))
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
-
 
 app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 app.use('/chat', chatRouter)
+app.use('/views', viewsRouter)
 
 export const httpServer = app.listen(PORT,() => console.log(`Listen on port ${PORT}`))
     
