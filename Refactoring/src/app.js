@@ -109,7 +109,8 @@ app.engine('handlebars', handlebars.engine(
     {
         helpers:{
             link: (url, variable) => `${url}${variable}`,
-            link_purchase: (url, variable) => `${url}${variable}/purchase`
+            link_purchase: (url, variable) => `${url}${variable}/purchase`,
+            addToCart: (pid, cid) => console.log(pid, cid)
             
         }
     }

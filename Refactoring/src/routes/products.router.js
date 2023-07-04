@@ -25,7 +25,6 @@ router.post('/', async (req,res) => {
 
 router.put('/:pid', async (req,res) => {
     const { pid } = req.params
-    console.log({pid});
     const updatedProductData = req.body
     const updatedProduct = await productsManager.updateOne(pid, updatedProductData)
     res.json(updatedProduct)

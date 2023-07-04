@@ -40,7 +40,7 @@
     {{#if data.products.length}}
     <div class='product-container'>
     {{#each data.products}}
-    {{log @../cart}}
+    {{!-- {{log @../cart}} --}}
         <div class='product'>
             <div class="product-img-container">
                 <img src={{thumbnail}} alt={{title}}>
@@ -51,7 +51,7 @@
                 <span class="product-category">*{{category}}</span>
                 <span class="product-price">${{price}}</span>
                 <span class="product-stock">Disponibles: {{stock}}</span>
-                <button class="product-cart-button" onclick="addToCart(1,2)">Agregar al carrito</button>
+                <button data-product="{{_id}} {{@../cart}}" class="product-cart-button">Agregar al carrito</button>
             </div>
         </div>
     {{/each}}
