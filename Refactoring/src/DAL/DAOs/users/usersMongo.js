@@ -9,6 +9,14 @@ export default class UsersManager {
         }
     }
 
+    async getOne(email){
+        try {
+            return await usersModel.find({email})
+        } catch (err) {
+            throw err
+        }
+    }
+
     async getOneById(id){
         try {
             return await usersModel.findById(id)

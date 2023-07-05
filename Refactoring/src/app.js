@@ -7,9 +7,11 @@ import './DAL/mongoDB/dbConfig.js'
 import productRouter from "./routes/products.router.js"
 import cartRouter from "./routes/carts.router.js"
 import chatRouter from "./routes/chat.router.js"
+import sessionsRouter from "./routes/sessions.router.js"
 import viewsRouter from "./routes/views.router.js"
 
 import handlebars from 'express-handlebars'
+import cookieParser from 'cookie-parser'
 
 // import para test
 import ProductsManager from "./DAL/DAOs/products/productsMongo.js"
@@ -25,6 +27,8 @@ const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+app.use(cookieParser())
+
      
 
 /* // INICIO TEST
@@ -118,10 +122,14 @@ app.engine('handlebars', handlebars.engine(
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
 
+
 app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 app.use('/chat', chatRouter)
+app.use('/api/sessions', sessionsRouter)
 app.use('/views', viewsRouter)
+app.use('/', (req, res) => res.redirect('/views/login'))
+
 
 export const httpServer = app.listen(PORT,() => console.log(`Listen on port ${PORT}`))
     
