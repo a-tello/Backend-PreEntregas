@@ -5,8 +5,9 @@ import UsersManager from "../DAL/DAOs/users/usersMongo.js"
 export const jwtValidator = async (req, res, next) => {
     try {
         const token = req.cookies.token
+        console.log({req});
 
-        if(!token) next()
+        if(!token) return next()
 
         const validateUser = jwt.verify(token, config.secretKeyTkn)
 
@@ -25,6 +26,7 @@ export const jwtValidator = async (req, res, next) => {
             next()
         } 
     } catch (error) {
+        throw a
     }
 }
 

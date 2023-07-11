@@ -3,6 +3,9 @@ import UsersManager from "../DAL/DAOs/users/usersMongo.js"
 import { compareData, hashData } from "../utils.js"
 import config from "../config.js"
 import { generateToken } from "../jwt.utils.js"
+import { jwtValidator } from "../middlewares/jwt.middleware.js"
+import jwt from "jsonwebtoken"
+
 
 const router = Router()
 const userManager = new UsersManager()
@@ -49,6 +52,18 @@ router.post('/signup', async (req, res) => {
         return res.redirect('/views/login')
     } catch (error) {
         throw error
+    }
+})
+
+router.get('/current', async (req, res) => {
+    try {
+        const { authorization } = req.headers
+        const validateUser = jwt.verify(authorization, config.secretKeyTkn)
+        const user = await userManager.getOneById(validateUser.userID)
+        res.send(user)
+        
+    } catch (error) {
+        res.send('Unauthorized')
     }
 })
 
