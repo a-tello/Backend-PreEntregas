@@ -13,9 +13,9 @@ export const compareData = async (data, dataDB) => {
 }
 
 export const isLogged = (req, res, next) => {
-    return req.cookies.User ? next() : res.redirect('/views/login')
+    return req.cookies.token ? next() : res.redirect('/views/login')
 }
 
 export const notLogged = (req, res, next) => {
-    return req.cookies.User ? res.redirect('/views/products') : next()
+    return req.cookies.token ? res.redirect('/views/products') : next()
 }

@@ -1,39 +1,48 @@
 import { Router } from "express"
 import ProductsManager from "../DAL/DAOs/products/productsMongo.js"
 import CartManager from "../DAL/DAOs/carts/cartsMongo.js"
-import { isLogged, notLogged } from "../utils.js"
+import { jwtValidator } from "../middlewares/jwt.middleware.js"
 
 const router = Router()
 const productManager = new ProductsManager()
 const cartManager = new CartManager()
 
-router.get('/products', isLogged, async (req, res) => {
+router.get('/products', jwtValidator, async (req, res) => {
+    if(!req.user?.isLogged) return res.redirect('views/login')
+        
     const products = await productManager.getAll({},{lean:true, leanWithId:false})
-    const user = req.cookies.User
-    res.render("products", {user, data: {products: products.payload, cart:'6489c2b5a319c64305cc54ac'}})
+    const user = req.user
+    return res.render("products", {user, data: {products: products.payload, cart:'6489c2b5a319c64305cc54ac'}})
 })
 
-router.get('/carts/:cid', async (req, res) => {
+router.get('/carts/:cid', jwtValidator, async (req, res) => {
+    if(!req.user?.isLogged) return res.redirect('/login')
+
     const { cid } = req.params
     const cart = await cartManager.getCartById(cid)
-    res.render("carts", {cart})
+    return res.render("carts", {cart})
 })
 
-router.get('/login', notLogged,  async (req, res) => {
-    res.render("login")
+router.get('/login', jwtValidator,  async (req, res) => {
+    if(req.user?.isLogged) return res.redirect('/views/products')
+    return res.render("login")
 })
 
-    router.get('/signup', notLogged,  async (req, res) => {
-    res.render("signup")
+router.get('/signup', jwtValidator,  async (req, res) => {
+    if(req.user?.isLogged) return res.redirect('/views/products')
+
+    return res.render("signup")
 })
 
-router.get('/profile', isLogged, async (req, res) => {
+router.get('/profile', jwtValidator, async (req, res) => {
+    if(!req.user?.isLogged) return res.redirect('/views/login')
+
     const user = req.cookies.User
-    res.render("profile", {user})
+    return res.render("profile", {user})
 })
 
 router.get('/error', async (req, res) => {
-    res.render("error")
+    return res.render("error")
 })
 
 

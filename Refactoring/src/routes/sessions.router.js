@@ -2,6 +2,7 @@ import { Router } from "express"
 import UsersManager from "../DAL/DAOs/users/usersMongo.js"
 import { compareData, hashData } from "../utils.js"
 import config from "../config.js"
+import { generateToken } from "../jwt.utils.js"
 
 const router = Router()
 const userManager = new UsersManager()
@@ -10,21 +11,25 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body
     try {
         if(email === config.admin_email && password === config.admin_password) {
-            res.cookie('User', {
+            const adminUser = {
                 firstname: 'Admin',
                 lastname: 'Coder',
-                role: 'Administrador',
+                role: 'Admin',
                 email: config.admin_email,
-                isAdmin: true   
-            })
+            }
+            
+            const token = generateToken({role})
+            res.cookie('token', token, {httpOnly: true})
             return res.redirect('/views/products')
         }
 
-
         const user = await userManager.getOne(email)
         if(user && await compareData(password, user[0].password)){
-            
+            const token = generateToken({userID: user[0]._id})
+            res.cookie('token', token, {httpOnly: true})
+            return res.redirect('/views/products')
         }
+        
         throw new Error
     } catch (error) {
         res.json({error: 'Usuario o contraseña incorrectos'})
@@ -48,7 +53,7 @@ router.post('/signup', async (req, res) => {
 })
 
 router.get('/logout', async (req, res) => {
-    res.clearCookie('User')
+    res.clearCookie('token')
     return res.redirect('/views/login')
 })
 
