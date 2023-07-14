@@ -1,4 +1,4 @@
-import { createOne, deleteOne, getAll, getOneById, updateOne } from "../services/products.services"
+import { createOne, deleteOne, getAll, getOneById, updateOne } from "../services/products.services.js"
 
 export const getProducts = async (req, res) => {
     const {limit=10, page=1, sort={}, ...query} = req.query
@@ -44,7 +44,7 @@ export const updateProduct = async (req, res) => {
     }
 }
 
-export const deleteProduct = async (id) => {
+export const deleteProduct = async (req, res) => {
     const id = req.params
     
     try {

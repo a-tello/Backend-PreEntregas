@@ -1,5 +1,5 @@
-import UsersManager from "../DAL/DAOs/users/usersMongo"
-import config from "../config"
+import UsersManager from "../DAL/DAOs/users/usersMongo.js"
+import config from "../config.js"
 
 const userManager = new UsersManager()
 export const adminUser = {

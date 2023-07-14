@@ -1,5 +1,5 @@
-import { compareData, hashData } from "../utils"
-import { createUser, getOneUserBy, isAdmin } from "./users.services"
+import { compareData, hashData } from "../utils.js"
+import { createUser, getOneUserBy, isAdmin } from "./users.services.js"
 
 export const loginUser = async (email, password) => {
     try {
@@ -22,7 +22,7 @@ export const loginUser = async (email, password) => {
     }
 }
 
-export const signup = async (user) => {
+export const signupUser = async (user) => {
 
     try {
         const registeredUser = await getOneUserBy(user.email)
@@ -38,7 +38,7 @@ export const signup = async (user) => {
     }
 }
 
-router.get('/current', async (req, res) => {
+/* router.get('/current', async (req, res) => {
     try {
         const { authorization } = req.headers
         const validateUser = jwt.verify(authorization, config.secretKeyTkn)
@@ -48,6 +48,6 @@ router.get('/current', async (req, res) => {
     } catch (error) {
         res.send('Unauthorized')
     }
-})
+}) */
 
 

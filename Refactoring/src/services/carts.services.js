@@ -1,4 +1,4 @@
-import CartManager from "../DAL/DAOs/carts/cartsMongo"
+import CartManager from "../DAL/DAOs/carts/cartsMongo.js"
 
 const cartManager = new CartManager()
 

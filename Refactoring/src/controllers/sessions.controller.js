@@ -1,4 +1,4 @@
-import { loginUser, signup } from "../services/sessions.services"
+import { loginUser, signupUser } from "../services/sessions.services.js"
 
 
 export const login = async (req, res) => {
@@ -15,19 +15,19 @@ export const login = async (req, res) => {
     }
 }
 
-router.post('/signup', async (req, res) => {
+export const signup = async (req, res) => {
     const user = req.body
     try {
-        return await signup (user) 
+        return await signupUser (user) 
             ? res.redirect('/views/login')
             : res.json({error:'Ya existe un usuario registrado con ese mail'})
            
     } catch (error) {
         throw error
     }
-})
+}
 
-router.get('/current', async (req, res) => {
+/* router.get('/current', async (req, res) => {
     try {
         const { authorization } = req.headers
         const validateUser = jwt.verify(authorization, config.secretKeyTkn)
@@ -37,7 +37,7 @@ router.get('/current', async (req, res) => {
     } catch (error) {
         res.send('Unauthorized')
     }
-})
+}) */
 
 export const logout = (req, res) => {
     res.clearCookie('token')

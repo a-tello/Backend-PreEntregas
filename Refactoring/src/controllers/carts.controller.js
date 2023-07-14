@@ -1,5 +1,5 @@
-import { addProductToCart, addProductsToCart, clearCart, createOne, deleteProductFromCart, getCartById, updateProductQuantityFromCart } from "../services/carts.services"
-import { getOneById } from "../services/products.services"
+import { addProductToCart, addProductsToCart, clearCart, createOne, deleteProductFromCart, getCartById, updateProductQuantityFromCart } from "../services/carts.services.js"
+import { getOneById } from "../services/products.services.js"
 
 export const createCart = async (req,res) => {
     try {
