@@ -1,88 +1,38 @@
 import { cartsModel } from '../../mongoDB/models/carts.model.js'
 
 class CartManager {
-    async createOne (products) {
+    
+    async createOne (obj) {
         try {
-            return await cartsModel.create({products}) 
+            return await cartsModel.create({obj}) 
         } catch(err) {
             throw err
         }
 
     }
 
-    async getCart(args={}) {
+    async getCart(filter={}) {
         try {
-            return await cartsModel.find(args).populate('products.product').lean()
-        } catch {
-            const error = new Error('Carts not found')
+            return await cartsModel.find(args)
+        } catch(error) {
             throw error
         }
     }
 
-    /* async getCarts() {
-
+       async getCartById(cartId) {
         try {
-            const carts = await cartsModel.find()
-            return carts
-        } catch {
-            throw error
-        }
-    } */
-
-    async getCartById(cartId) {
-        try {
-            const cart = await cartsModel.findById(cartId).populate('products.product').lean()
-            return cart
+            return await cartsModel.findById(cartId)
         } catch(err) {
             throw err
         }
     }
 
-
-    async addProductToCart(query, action) {        
+    async modifyProductFromCart(filter, action, opts) {
         try{
-            return cartsModel.findOneAndUpdate(query, action, {new: true})
-        } catch(err) {
-            throw err
-        }   
-    }
-
-    async addProductsToCart(cartId, products) {
-        try{
-            const cart = await cartsModel.findOneAndUpdate({_id:cartId}, {$push:{"products":{$each :products}}}, {new:true})
-            return cart
-        } catch(err) {
-            throw err
-        }
-    }
-
-    async updateProductQuantityFromCart(cartId, productId, newQuantity) {
-
-        try{
-            const cart = await cartsModel.findOneAndUpdate({_id:cartId, "products.product": productId}, {$set:{"products.$.quantity":newQuantity}}, {new:true})
-            //const cart = await cartsModel.updateOne({_id:cartId, "products.product": productId}, {quantity:newQuantity}, {new:true})
-            return cart
+            return cartsModel.findOneAndUpdate(filter, action, opts)
         } catch(err) {
             throw err
         }  
-    }
-
-    async deleteProductFromCart(cartId, productId) {
-
-        try {
-            return await cartsModel.findByIdAndUpdate({_id:cartId}, {"$pull":{"products":{"product":productId}}}, {new:true})
-        } catch (err) {
-            throw err
-        }
-    }
-
-    async clearCart(cartId) {
-        
-        try {
-            return await cartsModel.findOneAndUpdate({_id:cartId}, {"$pull":{"products":{}}}, {new:true})
-        } catch (err) {
-            throw err
-        }
     }
 }
 

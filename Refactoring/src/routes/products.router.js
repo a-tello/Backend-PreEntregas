@@ -1,39 +1,16 @@
 import { Router } from "express";
-import ProductsManager from "../DAL/DAOs/products/productsMongo.js";
+import { createProduct, deleteProduct, getProductById, getProducts, updateProduct } from "../controllers/products.controller.js";
 
 const router = Router()
-const productsManager = new ProductsManager()
 
-router.get('/', async (req,res) => {
-    const {limit=10, page=1, sort={}, ...query} = req.query
-    //const products = await productsManager.getAll({limit, page, sort: {price: sort}, lean:true, leanWithId: false})
-    const products = await productsManager.getAll(query, {limit, page, sort:{price:sort}, lean:true, leanWithId:false})
-    res.json(products)
-} )
+router.get('/', getProducts)
 
-router.get('/:pid', async (req,res) => {
-    const { pid } = req.params
-    const product = await productsManager.getOneById(pid)
-    res.json(product)
-} )
+router.get('/:pid', getProductById)
 
-router.post('/', async (req,res) => {
-    const productData = req.body
-    const newProduct = await productsManager.createOne(productData)
-    res.json(newProduct)
-})
+router.post('/', createProduct)
 
-router.put('/:pid', async (req,res) => {
-    const { pid } = req.params
-    const updatedProductData = req.body
-    const updatedProduct = await productsManager.updateOne(pid, updatedProductData)
-    res.json(updatedProduct)
-})
+router.put('/:pid', updateProduct)
 
-router.delete('/:pid', async (req,res) => {
-    const { pid } = req.params
-    const deleteProduct = await productsManager.deleteOne(pid)
-    res.json(deleteProduct)
-})
+router.delete('/:pid', deleteProduct)
 
 export default router

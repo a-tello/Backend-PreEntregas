@@ -3,19 +3,7 @@ import { productsModel } from '../../mongoDB/models/products.model.js'
 export default class ProductsManager {
     async getAll(query, params){
         try {
-            const products = await productsModel.paginate(query, params)
-            return {
-                status: 'success',
-                payload: products.docs,
-                totalPages: products.totalPages,
-                prevPage: products.prevPage,
-                nextPage: products.nextPage,
-                page: products.page,
-                hasPrevPage: products.hasPrevPage,
-                hasNextPage: products.hasNextPage,
-                prevLink: `localhost:8080/products/`,
-                nextLink: `localhost:8080/products/`
-            }
+            return await productsModel.paginate(query, params) 
         } catch (err) {
             throw err
         }
@@ -37,9 +25,9 @@ export default class ProductsManager {
         }
     }
 
-    async updateOne(id, data) {
+    async updateOne(id, newData, options) {
         try {
-            return await productsModel.findByIdAndUpdate(id, data, {new:true})
+            return await productsModel.findByIdAndUpdate(id, newData, options)
         } catch (err) {
             throw err
         }
