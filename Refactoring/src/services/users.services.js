@@ -20,7 +20,7 @@ export const getAllUsers = async (filter={}) => {
 
 export const getOneUserBy = async (filter) => {
     try {
-        return await userManager.find(filter)
+        return await userManager.getOneUserBy(filter)
     } catch (err) {
         throw err
     }
@@ -34,6 +34,6 @@ export const createUser = async (obj) => {
     }
 }
 
-export const isAdmin = async (email, password) => {
+export const isAdmin = (email, password) => {
     return email === config.admin_email && password === config.admin_password   
 }

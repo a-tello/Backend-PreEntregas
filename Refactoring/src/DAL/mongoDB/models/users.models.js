@@ -25,6 +25,9 @@ const usersSchema =  new mongoose.Schema({
     cart: {
         type: Number,
         require: true
+    },
+    role: {
+        type: String
     }
 })
 

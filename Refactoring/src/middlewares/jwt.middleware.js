@@ -1,32 +1,95 @@
 import jwt from "jsonwebtoken"
 import config from "../config.js"
-import UsersManager from "../DAL/DAOs/users/usersMongo.js"
+import { getOneUserBy } from "../services/users.services.js"
 
-export const jwtValidator = async (req, res, next) => {
+export const jwtValidatorCookie = async (req, res, next) => {
+    console.log('jwt');
     try {
         const token = req.cookies.token
-        console.log({req});
+        console.log(token);
 
         if(!token) return next()
 
         const validateUser = jwt.verify(token, config.secretKeyTkn)
 
         if(validateUser) {
-            const userManager = new UsersManager()
-            const user = await userManager.getOneById(validateUser.userID)
 
+            if(validateUser.role === 'Admin') {
+                req.user = {
+                    firstname: 'Coder',
+                    lastname: 'Admin',
+                    role: 'Admin',
+                    age: ' ',
+                    email: ' ',
+                    isLogged: true,
+                    isAdmin: true
+                }
+                return next()
+            }
+
+            const user = await getOneUserBy({'_id': validateUser.userID})
             req.user = {
-                firstname: user.firstname,
-                lastname: user.lastname,
-                role: user.role,
-                age: user.age,
-                email: user.email,
-                isLogged: true
+                firstname: user[0].firstname,
+                lastname: user[0].lastname,
+                role: user[0].role,
+                age: user[0].age,
+                email: user[0].email,
+                isLogged: true,
+                isAdmin: false
             }
             next()
-        } 
-    } catch (error) {
-        throw a
+        }
+         
+    }catch (err) {
+        //throw err
+        res.clearCookie('token')
+        res.redirect('/views/login')
+    }
+}
+
+export const jwtValidatorHeader = async (req, res, next) => {
+    console.log('jwt');
+    try {
+        const authHeader = req.get('Authorization')
+        const token = authHeader.split(' ')[1]
+        console.log('token header: ', token);
+
+        if(!token) return next()
+
+        const validateUser = jwt.verify(token, config.secretKeyTkn)
+
+        if(validateUser) {
+
+            if(validateUser.role === 'Admin') {
+                req.user = {
+                    firstname: 'Coder',
+                    lastname: 'Admin',
+                    role: 'Admin',
+                    age: ' ',
+                    email: ' ',
+                    isLogged: true,
+                    isAdmin: true
+                }
+                return next()
+            }
+
+            const user = await getOneUserBy({'_id': validateUser.userID})
+            req.user = {
+                firstname: user[0].firstname,
+                lastname: user[0].lastname,
+                role: user[0].role,
+                age: user[0].age,
+                email: user[0].email,
+                isLogged: true,
+                isAdmin: false
+            }
+            next()
+        }
+         
+    }catch (err) {
+        res.clearCookie('token')
+        res.redirect('/views/login')
+        throw err
     }
 }
 

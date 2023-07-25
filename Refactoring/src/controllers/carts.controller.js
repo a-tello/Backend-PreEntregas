@@ -1,5 +1,6 @@
 import { addProductToCart, addProductsToCart, clearCart, createOne, deleteProductFromCart, getCartById, updateProductQuantityFromCart } from "../services/carts.services.js"
 import { getOneById } from "../services/products.services.js"
+import { createTicket } from "../services/ticket.services.js"
 
 export const createCart = async (req,res) => {
     try {
@@ -11,8 +12,8 @@ export const createCart = async (req,res) => {
 }
 
 export const getCart = async (req,res) => {
-    const id = req.params
-    
+    const { id } = req.params
+
     try {
         const cart = await getCartById(id)
         res.status(200).json(cart)
@@ -29,6 +30,7 @@ export const addOneProductToCart = async (req,res) => {
         const cart = await addProductToCart(cid, pid)
         res.status(200).json(cart)
     } catch (err) {
+        console.log(err);
         res.status(400).json(err)
     }
 }
@@ -76,6 +78,17 @@ export const emptyCart = async (req, res) => {
         res.status(200).json({message:'Empty cart',cart})
     } catch (err) {
         res.status(400).json(err)
+    }
+}
+
+export const purchase = async (req, res) => {
+    const { email, cart } = req.user
+    try {
+        //await createTicket()    
+        console.log({email});
+        console.log({cart});
+    } catch (error) {
+        
     }
 }
 

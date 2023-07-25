@@ -13,7 +13,7 @@ class CartManager {
 
     async getCart(filter={}) {
         try {
-            return await cartsModel.find(args)
+            return await cartsModel.find(filter).populate('products.product').lean()
         } catch(error) {
             throw error
         }
@@ -21,7 +21,7 @@ class CartManager {
 
        async getCartById(cartId) {
         try {
-            return await cartsModel.findById(cartId)
+            return await cartsModel.findById(cartId).populate('products.product').lean()
         } catch(err) {
             throw err
         }

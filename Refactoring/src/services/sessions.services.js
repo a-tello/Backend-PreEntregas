@@ -1,21 +1,19 @@
+import { generateToken } from "../jwt.utils.js"
 import { compareData, hashData } from "../utils.js"
 import { createUser, getOneUserBy, isAdmin } from "./users.services.js"
 
 export const loginUser = async (email, password) => {
     try {
-        let token
 
         if(isAdmin(email, password)){
-            token = generateToken({role: 'Admin'})
+            return generateToken({role: 'Admin'}, '1h')
         }
             
-        const user = await getOneUserBy(email)
+        const user = await getOneUserBy({email})
 
         if(user && await compareData(password, user[0].password)){
-            token = generateToken({userID: user[0]._id})
+            return generateToken({userID: user[0]._id, role: user[0].role}, '1h')
         }
-
-        return token
 
     } catch (error) {
         throw error

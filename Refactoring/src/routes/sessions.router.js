@@ -1,13 +1,11 @@
 import { Router } from "express"
 import UsersManager from "../DAL/DAOs/users/usersMongo.js"
 import config from "../config.js"
-import { jwtValidator } from "../middlewares/jwt.middleware.js"
 import jwt from "jsonwebtoken"
 import { login, logout, signup } from "../controllers/sessions.controller.js"
 
 
 const router = Router()
-const userManager = new UsersManager()
 
 router.post('/login', login)
 

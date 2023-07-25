@@ -13,7 +13,7 @@ export const createOne = async  (obj) => {
 
 export const getCart = async (args={}) => {
     try {
-        return await cartManager.getCart(args).populate('products.product').lean()
+        return await cartManager.getCart(args)
     } catch {
         const error = new Error('Carts not found')
         throw error
@@ -23,7 +23,7 @@ export const getCart = async (args={}) => {
 
 export const getCartById = async (cartId) => {
     try {
-        const cart = await cartManager.getCartById(cartId).populate('products.product').lean()
+        const cart = await cartManager.getCartById(cartId)
         return cart
     } catch(err) {
         throw err
@@ -36,13 +36,13 @@ export const addProductToCart = async (cartID, productID) => {
         const existsProductInCart = await cartManager.getCart({_id: cartID, "products.product": productID})
 
         if(existsProductInCart.length) {
-            return await cartManager.modifyProductFromCart({_id:cid, "products.product":pid},
+            return await cartManager.modifyProductFromCart({_id:cartID, "products.product":productID},
             {$inc:{"products.$.quantity":1}}, {new:true})
 
         } else {
-            return await cartManager.modifyProductFromCart({_id:cid},
+            return await cartManager.modifyProductFromCart({_id:cartID},
             {$push:{
-                "products":{product: pid, quantity:1}}}, {new:true})
+                "products":{product: productID, quantity:1}}}, {new:true})
         }
     } catch(err) {
         throw err

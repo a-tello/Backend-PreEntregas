@@ -1,8 +1,10 @@
 <div class="container">
     <h1 class="title">CARRITOS</h1>
+    {{log cart.products.length}}
     {{#if cart.products.length}}
     <span>ID Carrito: {{cart._id}}</span>
     <div class='cart-container'>
+    {{log cart}}
     {{#each cart.products}}
         <div class='cart-item'>
             <div class="cart-img-item-container">
