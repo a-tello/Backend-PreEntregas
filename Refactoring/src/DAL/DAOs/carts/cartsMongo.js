@@ -1,4 +1,5 @@
 import { cartsModel } from '../../mongoDB/models/carts.model.js'
+import { productsModel } from '../../mongoDB/models/products.model.js'
 
 class CartManager {
     
@@ -8,7 +9,6 @@ class CartManager {
         } catch(err) {
             throw err
         }
-
     }
 
     async getCart(filter={}) {
@@ -34,6 +34,14 @@ class CartManager {
             throw err
         }  
     }
+
+    async deleteOne(cartId){
+        try {
+            await cartsModel.findByIdAndDelete(cartId)
+        } catch (err) {
+            throw err
+        }
+    }
 }
 
-export default CartManager
+export const cartManager = new CartManager()

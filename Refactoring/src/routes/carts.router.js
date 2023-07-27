@@ -1,23 +1,23 @@
 import { Router } from "express";
-import { addMultipleProductsToCart, addOneProductToCart, changeQuantity, createCart, deleteOneProductFromCart, emptyCart, getCart, purchase } from "../controllers/carts.controller.js";
+import { cartController } from "../controllers/carts.controller.js";
 import { user } from "../middlewares/auth.middleware.js";
 
 const router = Router()
 
-router.get('/:cid', getCart)
+router.get('/:cid', cartController.getCart)
 
-router.post('/', createCart)
+router.post('/', cartController.createCart)
 
-router.post('/:cid/product/:pid', user, addOneProductToCart)
+router.post('/:cid/product/:pid', user, cartController.addOneProductToCart)
 
-router.put('/:cid', user, addMultipleProductsToCart)
+router.put('/:cid', user, cartController.addMultipleProductsToCart)
 
-router.put('/:cid/products/:pid', changeQuantity)
+router.put('/:cid/products/:pid', cartController.changeQuantity)
 
-router.delete('/:cid/products/:pid', deleteOneProductFromCart)
+router.delete('/:cid/products/:pid', cartController.deleteOneProductFromCart)
 
-router.delete('/:cid', emptyCart)
+router.delete('/:cid', cartController.emptyCart)
 
-router.get('/:cid/purchase', purchase)
+router.get('/:cid/purchase', cartController.purchase)
 
 export default router
