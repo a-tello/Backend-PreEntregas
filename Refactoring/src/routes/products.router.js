@@ -1,19 +1,17 @@
 import { Router } from "express";
-import { createProduct, deleteProduct, getProductById, getProducts, updateProduct } from "../controllers/products.controller.js";
+import { productController } from "../controllers/products.controller.js";
 import { admin } from "../middlewares/auth.middleware.js";
-import { jwtValidatorCookie, jwtValidatorHeader } from "../middlewares/jwt.middleware.js"
-
 
 const router = Router()
 
-router.get('/', getProducts)
+router.get('/', productController.getProducts)
 
-router.get('/:pid', getProductById)
+router.get('/:pid', productController.getProductById)
 
-router.post('/', admin , createProduct)
+router.post('/', admin , productController.createProduct)
 
-router.put('/:pid', updateProduct)
+router.put('/:pid', productController.updateProduct)
 
-router.delete('/:pid', deleteProduct)
+router.delete('/:pid', productController.deleteProduct)
 
 export default router

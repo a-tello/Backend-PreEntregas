@@ -1,6 +1,6 @@
 import { productsModel } from '../../mongoDB/models/products.model.js'
 
-export default class ProductsManager {
+class ProductManager {
     async getAll(query, params){
         try {
             return await productsModel.paginate(query, params) 
@@ -25,9 +25,9 @@ export default class ProductsManager {
         }
     }
 
-    async updateOne(id, newData, options) {
+    async updateOne(id, action, options) {
         try {
-            return await productsModel.findByIdAndUpdate(id, newData, options)
+            return await productsModel.findByIdAndUpdate(id, action, options)
         } catch (err) {
             throw err
         }
@@ -41,3 +41,5 @@ export default class ProductsManager {
         }
     }
 }
+
+export const productManager = new ProductManager()
