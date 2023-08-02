@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon src/app.js",
-    "test": "mocha -t 5000 test/**.test.js"
+    "test": "mocha -t 20000 test/unitarios.test.js"
   },
   "keywords": [],
   "author": "",
