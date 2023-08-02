@@ -19,3 +19,8 @@ export const isLogged = (req, res, next) => {
 export const notLogged = (req, res, next) => {
     return req.cookies.token ? res.redirect('/views/products') : next()
 }
+
+export const capitalizeFirst = (str) => {
+    str.toLowerCase()
+    return str.charAt(0).toUpperCase() + str.slice(1)
+}
