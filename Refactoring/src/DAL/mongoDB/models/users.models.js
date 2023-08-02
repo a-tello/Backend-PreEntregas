@@ -23,7 +23,7 @@ const usersSchema =  new mongoose.Schema({
         require: true
     },
     cart: {
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId, ref: 'carts',
         require: true
     },
     role: {

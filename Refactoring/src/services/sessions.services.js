@@ -1,51 +1,58 @@
+import { userManager } from "../DAL/DAOs/users/usersMongo.js"
 import { generateToken } from "../jwt.utils.js"
 import { compareData, hashData } from "../utils.js"
-import { createUser, getOneUserBy, isAdmin } from "./users.services.js"
+import { cartService } from "./carts.services.js";
+import { userService } from "./users.services.js"
 
-export const loginUser = async (email, password) => {
-    try {
-
-        if(isAdmin(email, password)){
-            return generateToken({role: 'Admin'}, '1h')
+class SessionService {
+    
+    async loginUser (email, password) {
+        try {
+            console.log({email});
+            console.log({password});
+            if(userService.isAdmin(email, password)) return generateToken({role: 'Admin'}, 5)
+                
+            const user = await userService.getOneUserBy({email})
+    
+            if(user.length && await compareData(password, user[0].password)){
+                return generateToken({userID: user[0]._id, role: user[0].role}, '1h')
+            }
+            throw new Error('Usuario o contraseña incorrecto')
+        } catch (error) {
+            throw error
         }
+    }
+    
+    async signupUser (user) {
+    
+        try {
+            const registeredUser = await userService.getOneUserBy({email: user.email})
+
+            if(registeredUser.length) return false
+    
+            const hashPassword = await hashData(user.password)
+            const newCart = await cartService.createOne()
+            await userManager.createUser({...user, password: hashPassword, cart:newCart})
             
-        const user = await getOneUserBy({email})
-
-        if(user && await compareData(password, user[0].password)){
-            return generateToken({userID: user[0]._id, role: user[0].role}, '1h')
+            return true
+        } catch (error) {
+            throw error
         }
-
-    } catch (error) {
-        throw error
     }
-}
+    
+    /* router.get('/current', async (req, res) {
+        try {
+            const { authorization } = req.headers
+            const validateUser = jwt.verify(authorization, config.secretKeyTkn)
+            const user = await userManager.getOneById(validateUser.userID)
+            res.send(user)
+            
+        } catch (error) {
+            res.send('Unauthorized')
+        }
+    }) */
+    
 
-export const signupUser = async (user) => {
+}    
 
-    try {
-        const registeredUser = await getOneUserBy(user.email)
-        
-        if(registeredUser.length) return false
-
-        const hashPassword = await hashData(user.password)
-        await createUser({...user, password: hashPassword, cart:'1152122'})
-        
-        return true
-    } catch (error) {
-        throw error
-    }
-}
-
-/* router.get('/current', async (req, res) => {
-    try {
-        const { authorization } = req.headers
-        const validateUser = jwt.verify(authorization, config.secretKeyTkn)
-        const user = await userManager.getOneById(validateUser.userID)
-        res.send(user)
-        
-    } catch (error) {
-        res.send('Unauthorized')
-    }
-}) */
-
-
+export const sessionService = new SessionService()

@@ -1,28 +1,24 @@
 import { Router } from "express"
-import UsersManager from "../DAL/DAOs/users/usersMongo.js"
 import config from "../config.js"
 import jwt from "jsonwebtoken"
-import { login, logout, signup } from "../controllers/sessions.controller.js"
+import { sessionController } from "../controllers/sessions.controller.js"
+import { jwtValidator } from "../middlewares/jwt.middleware.js"
 
 
 const router = Router()
 
-router.post('/login', login)
+router.post('/login', sessionController.login)
 
-router.post('/signup', signup)
+router.post('/signup', sessionController.signup)
 
-/* router.get('/current', async (req, res) => {
+router.get('/current', jwtValidator, async (req, res) => {
     try {
-        const { authorization } = req.headers
-        const validateUser = jwt.verify(authorization, config.secretKeyTkn)
-        const user = await userManager.getOneById(validateUser.userID)
-        res.send(user)
+        res.json(req.user)
         
     } catch (error) {
         res.send('Unauthorized')
     }
 })
- */
-router.get('/logout', logout)
+router.get('/logout', sessionController.logout)
 
 export default router

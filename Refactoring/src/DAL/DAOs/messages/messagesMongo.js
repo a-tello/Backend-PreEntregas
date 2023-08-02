@@ -8,6 +8,7 @@ export default class MessagesManager {
             return newMessage
         }
         catch(err) {
+            throw err
         }
     }
     
@@ -17,6 +18,7 @@ export default class MessagesManager {
             return messages
         }
         catch(err) {
+            throw err
         }
     }
 
@@ -24,7 +26,7 @@ export default class MessagesManager {
         try {
             await messagesModel.deleteMany({})
         } catch (error) {
-            
+            throw err
         }
     }
 

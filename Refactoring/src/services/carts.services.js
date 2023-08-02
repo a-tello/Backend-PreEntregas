@@ -30,19 +30,18 @@ class CartService {
         }
     }
     
-    async addProductToCart (cartID, productID) {        
+    async addProductToCart (cartID, productID, quantity = 1) {        
         
         try{
-            const existsProductInCart = await cartManager.getCart({_id: cartID, "products.product": productID})
-    
-            if(existsProductInCart.length) {
-                return await cartManager.modifyProductFromCart({_id:cartID, "products.product":productID},
-                {$inc:{"products.$.quantity":1}}, {new:true})
+                
+            if(this.isProductInCart) {
+                return await cartManager.updateCart({_id:cartID, "products.product":productID},
+                {$inc:{"products.$.quantity":quantity}}, {new:true})
     
             } else {
-                return await cartManager.modifyProductFromCart({_id:cartID},
+                return await cartManager.updateCart({_id:cartID},
                 {$push:{
-                    "products":{product: productID, quantity:1}}}, {new:true})
+                    "products":{product: productID, quantity:quantity}}}, {new:true})
             }
         } catch(err) {
             throw err
@@ -51,7 +50,10 @@ class CartService {
     
     async addProductsToCart (cartId, products) {
         try{
-            return await cartManager.modifyProductFromCart({_id:cartId}, {$push:{"products":{$each :products}}}, {new:true})
+            products.forEach(async product => {
+                await this.addProductToCart(cartId, product.product, product.quantity )
+            })
+            return
         } catch(err) {
             throw err
         }
@@ -60,7 +62,7 @@ class CartService {
     async updateProductQuantityFromCart (cartId, productId, newQuantity) {
     
         try{
-            return await cartManager.modifyProductFromCart({_id:cartId, "products.product": productId}, {$set:{"products.$.quantity":newQuantity}}, {new:true})
+            return await cartManager.updateCart({_id:cartId, "products.product": productId}, {$set:{"products.$.quantity":newQuantity}}, {new:true})
         } catch(err) {
             throw err
         }  
@@ -69,7 +71,7 @@ class CartService {
     async deleteProductFromCart (cartId, productId) {
     
         try {
-            return await cartManager.modifyProductFromCart({_id:cartId}, {"$pull":{"products":{"product":productId}}}, {new:true})
+            return await cartManager.updateCart({_id:cartId}, {"$pull":{"products":{"product":productId}}}, {new:true})
         } catch (err) {
             throw err
         }
@@ -78,11 +80,17 @@ class CartService {
     async clearCart (cartId) {
         
         try {
-            return await cartManager.modifyProductFromCart({_id:cartId}, {"$pull":{"products":{}}}, {new:true})
+            return await cartManager.updateCart({_id:cartId}, {"$pull":{"products":{}}}, {new:true})
         } catch (err) {
             throw err
         }
     }
+
+    async isProductInCart(cartID, productID) {
+        const cart = await cartManager.getCart({_id: cartID, "products.product": productID})
+        return cart.length
+    }
+
 }
 
 export const cartService = new CartService()

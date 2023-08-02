@@ -1,6 +1,6 @@
 import { usersModel } from '../../mongoDB/models/users.models.js'
 
-export default class UsersManager {
+class UserManager {
     async getAllUsers(filter){
         try {
             return await usersModel.find(filter)
@@ -24,4 +24,14 @@ export default class UsersManager {
             throw err
         }
     }    
+
+    async deleteOne(id) {
+        try {
+            return await usersModel.findByIdAndDelete(id)
+        } catch (error) {
+            throw error
+        }
+    }
 }
+
+export const userManager = new UserManager()
