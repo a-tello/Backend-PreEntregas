@@ -8,16 +8,18 @@ class SessionService {
     
     async loginUser (email, password) {
         try {
-            console.log({email});
-            console.log({password});
             if(userService.isAdmin(email, password)) return generateToken({role: 'Admin'}, 5)
                 
             const user = await userService.getOneUserBy({email})
-    
-            if(user.length && await compareData(password, user[0].password)){
-                return generateToken({userID: user[0]._id, role: user[0].role}, '1h')
-            }
-            throw new Error('Usuario o contraseña incorrecto')
+            
+            if (!user.length) throw new Error('Invalid email')
+        
+            const passwordMatch = await compareData(password, user[0].password);
+        
+            if (!passwordMatch) throw new Error('Incorrect password')
+
+            return generateToken({userID: user[0]._id, role: user[0].role}, '1h')
+            
         } catch (error) {
             throw error
         }

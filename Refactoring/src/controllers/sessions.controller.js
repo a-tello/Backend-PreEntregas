@@ -4,7 +4,7 @@ class SessionController {
     
     async login (req, res) {
         const { email, password } = req.body
-       
+        
         try {
             const token = await sessionService.loginUser(email, password)
     

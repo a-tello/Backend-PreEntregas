@@ -2,6 +2,7 @@ import { Router } from "express"
 import { jwtValidator } from "../middlewares/jwt.middleware.js"
 import { productService } from "../services/products.services.js"
 import { cartService } from "../services/carts.services.js"
+import passport from "passport"
 
 const router = Router()
 
@@ -9,7 +10,7 @@ router.get('/test', jwtValidator, (req, res) => {
     console.log('Autorizado por header');
 })
 
-router.get('/products', jwtValidator, async (req, res) => {
+router.get('/products', passport.authenticate('jwt', {session:false}), async (req, res) => {
     console.log('entra products');
     if(!req.user?.isLogged) return res.redirect('views/login')
 

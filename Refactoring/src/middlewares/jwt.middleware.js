@@ -1,13 +1,20 @@
 import jwt from "jsonwebtoken"
 import config from "../config.js"
-import { getOneUserBy } from "../services/users.services.js"
+import { userService } from "../services/users.services.js"
+import userRes from "../DAL/DTOs/userRes.dto.js"
 
-export const jwtValidatorCookie = async (req, res, next) => {
-    console.log('jwt');
+const tokenFromHeader = (req) => {
+    console.log('entra header')
+    const authHeader = req.get('Authorization')
+    const token = authHeader?.split(' ')[1]
+    return token
+}
+
+
+export const jwtValidator = async (req, res, next) => {
     try {
-        const token = req.cookies.token
+        const token = req.cookies.Authorization || tokenFromHeader(req)
         console.log(token);
-
         if(!token) return next()
 
         const validateUser = jwt.verify(token, config.secretKeyTkn)
@@ -27,13 +34,10 @@ export const jwtValidatorCookie = async (req, res, next) => {
                 return next()
             }
 
-            const user = await getOneUserBy({'_id': validateUser.userID})
+            const user = await userService.getOneUserBy({'_id': validateUser.userID})
+            const userResp = new userRes(user[0])
             req.user = {
-                firstname: user[0].firstname,
-                lastname: user[0].lastname,
-                role: user[0].role,
-                age: user[0].age,
-                email: user[0].email,
+                ...userResp ,
                 isLogged: true,
                 isAdmin: false
             }
@@ -41,16 +45,17 @@ export const jwtValidatorCookie = async (req, res, next) => {
         }
          
     }catch (err) {
-        //throw err
+        throw err
         res.clearCookie('token')
         res.redirect('/views/login')
     }
 }
 
-export const jwtValidatorHeader = async (req, res, next) => {
+/* export const jwtValidatorHeader = async (req, res, next) => {
     console.log('jwt');
     try {
         const authHeader = req.get('Authorization')
+        console.log({authHeader});
         const token = authHeader.split(' ')[1]
         console.log('token header: ', token);
 
@@ -92,7 +97,7 @@ export const jwtValidatorHeader = async (req, res, next) => {
         throw err
     }
 }
-
+ */
 export const verifyTokenAdmin = (req, res, next) => {
     try {
         const authHeader = req.get('Authorization')
