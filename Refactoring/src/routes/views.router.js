@@ -28,12 +28,12 @@ router.get('/carts/:cid', jwtValidator, async (req, res) => {
     return res.render("carts", {cart:cart[0]})
 })
 
-router.get('/login', jwtValidator, (req, res) => {
+router.get('/login', (req, res) => {
     if(req.user?.isLogged) return res.redirect('/views/products')
     return res.render("login")
 })
 
-router.get('/signup', jwtValidator,  async (req, res) => {
+router.get('/signup',  async (req, res) => {
     if(req.user?.isLogged) return res.redirect('/views/products')
 
     return res.render("signup")

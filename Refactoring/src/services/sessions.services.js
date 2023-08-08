@@ -4,11 +4,13 @@ import { compareData, hashData } from "../utils.js"
 import { cartService } from "./carts.services.js";
 import { userService } from "./users.services.js"
 
+const EXPIRATION_TIME_TOKEN = 5 // minutes
+
 class SessionService {
     
     async loginUser (email, password) {
         try {
-            if(userService.isAdmin(email, password)) return generateToken({role: 'Admin'}, 5)
+            if(userService.isAdmin(email, password)) return generateToken({role: 'Admin'}, EXPIRATION_TIME_TOKEN)
                 
             const user = await userService.getOneUserBy({email})
             
@@ -18,7 +20,7 @@ class SessionService {
         
             if (!passwordMatch) throw new Error('Incorrect password')
 
-            return generateToken({userID: user[0]._id, role: user[0].role}, '1h')
+            return generateToken({user: {userID: user[0]._id, role: user[0].role}}, EXPIRATION_TIME_TOKEN)
             
         } catch (error) {
             throw error
@@ -30,13 +32,13 @@ class SessionService {
         try {
             const registeredUser = await userService.getOneUserBy({email: user.email})
 
-            if(registeredUser.length) return false
+            if(registeredUser.length) throw new Error('Email already registered')
     
             const hashPassword = await hashData(user.password)
             const newCart = await cartService.createOne()
-            await userManager.createUser({...user, password: hashPassword, cart:newCart})
+            const newUser = await userManager.createUser({...user, password: hashPassword, cart:newCart})
             
-            return true
+            return newUser
         } catch (error) {
             throw error
         }

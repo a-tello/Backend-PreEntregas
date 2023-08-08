@@ -1,6 +1,4 @@
 import { Router } from "express"
-import config from "../config.js"
-import jwt from "jsonwebtoken"
 import { sessionController } from "../controllers/sessions.controller.js"
 import { jwtValidator } from "../middlewares/jwt.middleware.js"
 import passport from "passport"
@@ -44,7 +42,9 @@ router.post('/login', function (req, res, next) {
     }
   );
 
-router.post('/signup', sessionController.signup)
+router.post('/signup', passport.authenticate('signup', {session: false}), async (req, res) => {
+    res.redirect('/views/login')
+})
 
 router.get('/current', jwtValidator, async (req, res) => {
     try {
