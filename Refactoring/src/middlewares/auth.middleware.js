@@ -1,29 +1,20 @@
 import jwt from "jsonwebtoken"
 import config from "../config.js";
+import passport from "passport";
 
-const roleAuthorization = (role) => {
-    return (req, res, next) => {
 
-        try {
+ export const roleAuthorization =  (req, res, next) => {
+    passport.authenticate('jwt', {session:false}, async (err, user, info) => {
+      if(!user) return res.redirect('/')
+      
+      
+      return next()
+    })(req, res, next)
+  }
 
-            const authHeader = req.get('Authorization')
-            const token = authHeader.split(' ')[1]
-
-            if(!token) throw new Error
-
-            const validateUser = jwt.verify(token, config.secretKeyTkn)
-
-            if(validateUser.role === role) return next()
-            throw new Error
-        } catch (err) {
-            throw new Error(`Unauthroized. Your role should be ${role}`)
-        }
-    }
-}
-
-export const admin = roleAuthorization('Admin')
+/* export const admin = roleAuthorization('Admin')
 export const user = roleAuthorization('User')
-export const premium = roleAuthorization('Premium')
+export const premium = roleAuthorization('Premium') */
 
 
 const isNotAuthorized = async (URL) => {

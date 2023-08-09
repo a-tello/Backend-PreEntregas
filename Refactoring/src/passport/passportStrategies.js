@@ -3,6 +3,8 @@ import { Strategy as LocalStrategy} from 'passport-local'
 import { Strategy as JWTstrategy} from 'passport-jwt'
 import { sessionService } from '../services/sessions.services.js';
 import config from "../config.js"
+import { userService } from '../services/users.services.js';
+import userRes from '../DAL/DTOs/userRes.dto.js';
 
 
 const tokenFromHeader = (req) => {
@@ -21,21 +23,17 @@ const getJwt = (req) => {
 passport.use(new JWTstrategy(
       {
         secretOrKey: config.secretKeyTkn,
-        passReqToCallback: true, 
         jwtFromRequest: getJwt
       },
-      async (req, token, done) => {
-        console.log("in jwt strat. token: ", token);
+      async (token, done) => {
 
-        if(!token){
-            console.log('NO TOKEN');
-        }
-        if (!token.user) return done(null, false)
-  
-  
-        // 3. Successfully decoded and validated user:
-        // (adds the req.user, req.login, etc... properties to req. Then calls the next function in the chain.)
-        return done(null, token.user);
+        if (!token?.user) return done(null, false)
+
+
+        const user = await userService.getOneUserBy({_id: token.user.userID})
+        console.log({user});
+        const userResp = new userRes(user[0])
+        return done(null, {...userResp});
       }
     )
   );
@@ -75,3 +73,5 @@ passport.use('login', new LocalStrategy(
     }
     }
 ))
+
+

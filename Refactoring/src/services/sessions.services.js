@@ -4,7 +4,7 @@ import { compareData, hashData } from "../utils.js"
 import { cartService } from "./carts.services.js";
 import { userService } from "./users.services.js"
 
-const EXPIRATION_TIME_TOKEN = 5 // minutes
+const EXPIRATION_TIME_TOKEN = 600 // seconds
 
 class SessionService {
     
@@ -36,7 +36,7 @@ class SessionService {
     
             const hashPassword = await hashData(user.password)
             const newCart = await cartService.createOne()
-            const newUser = await userManager.createUser({...user, password: hashPassword, cart:newCart})
+            const newUser = await userManager.createUser({...user, password: hashPassword, cart:newCart, role: 'User'})
             
             return newUser
         } catch (error) {

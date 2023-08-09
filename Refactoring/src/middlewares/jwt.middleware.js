@@ -4,7 +4,6 @@ import { userService } from "../services/users.services.js"
 import userRes from "../DAL/DTOs/userRes.dto.js"
 
 const tokenFromHeader = (req) => {
-    console.log('entra header')
     const authHeader = req.get('Authorization')
     const token = authHeader?.split(' ')[1]
     return token
