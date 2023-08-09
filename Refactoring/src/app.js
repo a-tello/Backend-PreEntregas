@@ -12,10 +12,11 @@ import viewsRouter from "./routes/views.router.js"
 
 import handlebars from 'express-handlebars'
 import cookieParser from 'cookie-parser'
+import passport from "passport"
 
 const PORT = config.port
 const app = express()
-
+app.use(passport.initialize());
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())

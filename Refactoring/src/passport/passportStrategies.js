@@ -8,7 +8,6 @@ import userRes from '../DAL/DTOs/userRes.dto.js';
 
 
 const tokenFromHeader = (req) => {
-    console.log('entra header')
     const authHeader = req.get('Authorization')
     const token = authHeader?.split(' ')[1]
     return token
@@ -27,12 +26,17 @@ passport.use(new JWTstrategy(
       },
       async (token, done) => {
 
-        if (!token?.user) return done(null, false)
 
+        if (!token){
+            const err = new Error('Forbidden')
+            return done(err, false)
+        } 
+
+        if(token.user.role === 'Admin') return done(null, {role:'Admin'})
 
         const user = await userService.getOneUserBy({_id: token.user.userID})
-        console.log({user});
         const userResp = new userRes(user[0])
+
         return done(null, {...userResp});
       }
     )

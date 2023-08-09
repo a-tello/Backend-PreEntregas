@@ -2,10 +2,11 @@ import { Router } from "express"
 import { httpServer } from "../app.js"
 import MessagesManager from "../DAL/DAOs/messages/messagesMongo.js"
 import { Server } from 'socket.io'
+import { jwtValidation, roleAuthorization } from "../middlewares/auth.middleware.js"
 
 const router = Router()
 
-router.get('/', (req, res) => {
+router.get('/', jwtValidation, roleAuthorization('User'),(req, res) => {
     res.render('chat')
     const socketServer = new Server(httpServer)
     const messagesManager = new MessagesManager()

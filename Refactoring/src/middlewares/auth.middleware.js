@@ -2,15 +2,24 @@ import jwt from "jsonwebtoken"
 import config from "../config.js";
 import passport from "passport";
 
-
- export const roleAuthorization =  (req, res, next) => {
+export const roleAuthorization =  (...roles) => {
+    return (req, res, next) => {
+        console.log('roles',req.user);
+        const matchRole = roles.includes(req.user.role)
+        if(!matchRole) return res.send('Unauthorized')
+        return next()
+    }
+}
+export const jwtValidation =  (req, res, next) => {
+    console.log('VALIDANDOOOO');
     passport.authenticate('jwt', {session:false}, async (err, user, info) => {
-      if(!user) return res.redirect('/')
-      
-      
-      return next()
+        if(!user) {console.log('entra al redirect del validation');return res.redirect('/')}
+
+        req.user = user
+        return next()
     })(req, res, next)
-  }
+}
+
 
 /* export const admin = roleAuthorization('Admin')
 export const user = roleAuthorization('User')
