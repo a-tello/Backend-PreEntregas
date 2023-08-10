@@ -18,6 +18,6 @@ router.delete('/:cid/products/:pid', cartController.deleteOneProductFromCart)
 
 router.delete('/:cid', cartController.emptyCart)
 
-router.get('/:cid/purchase', cartController.purchase)
+router.get('/:cid/purchase', jwtValidation, cartController.purchase)
 
 export default router

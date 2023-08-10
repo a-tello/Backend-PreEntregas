@@ -1,6 +1,6 @@
 import { ticketModel } from "../../mongoDB/models/ticket.model.js"
 
-export default class TicketManager {
+ class TicketManager {
 
     async createOne(data){
         try {
@@ -26,3 +26,5 @@ export default class TicketManager {
         }
     }
 }
+
+export const ticketManager = new TicketManager()

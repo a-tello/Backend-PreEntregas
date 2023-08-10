@@ -1,6 +1,7 @@
+import { productManager } from "../DAL/DAOs/products/productsMongo.js"
 import { cartService } from "../services/carts.services.js"
 import { productService } from "../services/products.services.js"
-import { createTicket } from "../services/ticket.services.js"
+import { ticketService } from "../services/ticket.services.js"
 
 
 class CartController {
@@ -83,15 +84,18 @@ class CartController {
             res.status(400).json(err)
         }
     }
-    
+
     async purchase (req, res) {
         const { email, cart } = req.user
+
         try {
-            //await createTicket()    
-            console.log({email});
-            console.log({cart});
-        } catch (error) {
             
+            
+            const availableProducts =  await productService.getAvailableProducts(cart)
+            const ticket = await ticketService.createTicket(email, availableProducts)    
+            res.json({ticket})
+        } catch (error) {
+            throw error
         }
     }
 
