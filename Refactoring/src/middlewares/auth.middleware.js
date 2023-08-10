@@ -4,15 +4,16 @@ import passport from "passport";
 
 export const roleAuthorization =  (...roles) => {
     return (req, res, next) => {
-        console.log('roles',req.user);
         const matchRole = roles.includes(req.user.role)
         if(!matchRole) return res.send('Unauthorized')
         return next()
     }
 }
 export const jwtValidation =  (req, res, next) => {
-    console.log('VALIDANDOOOO');
-    passport.authenticate('jwt', {session:false}, async (err, user, info) => {
+        passport.authenticate('jwt', {session:false}, async (err, user, info) => {
+        console.log({err});
+        console.log({info});
+        if(info) return next()
         if(!user) {console.log('entra al redirect del validation');return res.redirect('/')}
 
         req.user = user

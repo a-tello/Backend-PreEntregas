@@ -1,6 +1,5 @@
 import { Router } from "express"
 import { sessionController } from "../controllers/sessions.controller.js"
-import { jwtValidator } from "../middlewares/jwt.middleware.js"
 import passport from "passport"
 import '../passport/passportStrategies.js'
 
@@ -30,14 +29,14 @@ router.post('/signup', passport.authenticate('signup', {session: false}), async 
     res.redirect('/views/login')
 })
 
-router.get('/current', jwtValidator, async (req, res) => {
+/* router.get('/current', jwtValidator, async (req, res) => {
     try {
         res.json(req.user)
         
     } catch (error) {
         res.send('Unauthorized')
     }
-})
+}) */
 router.get('/logout', sessionController.logout)
 
 export default router

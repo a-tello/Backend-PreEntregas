@@ -32,12 +32,12 @@ passport.use(new JWTstrategy(
             return done(err, false)
         } 
 
-        if(token.user.role === 'Admin') return done(null, {role:'Admin'})
+        if(token.user.role === 'Admin') return done(null, {role:'Admin', isLogged: true})
 
         const user = await userService.getOneUserBy({_id: token.user.userID})
         const userResp = new userRes(user[0])
 
-        return done(null, {...userResp});
+        return done(null, {...userResp, isLogged: true});
       }
     )
   );
@@ -66,13 +66,11 @@ passport.use('login', new LocalStrategy(
         passwordField: "password",
     },
     async (email, password, done) => {
-    console.log("login named.");
     
     try {
         const userToken = await sessionService.loginUser(email, password)
         return done(null, userToken, { message: "Hey congrats you are logged in!" });
     } catch (error) {
-        console.log('error passport');
         return done(error)
     }
     }

@@ -10,7 +10,7 @@ const tokenFromHeader = (req) => {
 }
 
 
-export const jwtValidator = async (req, res, next) => {
+/* export const jwtValidator = async (req, res, next) => {
     try {
         const token = req.cookies.Authorization || tokenFromHeader(req)
         console.log(token);
@@ -49,7 +49,7 @@ export const jwtValidator = async (req, res, next) => {
         res.redirect('/views/login')
     }
 }
-
+ */
 /* export const jwtValidatorHeader = async (req, res, next) => {
     console.log('jwt');
     try {
