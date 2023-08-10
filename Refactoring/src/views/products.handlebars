@@ -50,7 +50,7 @@
                 <span class="product-category">*{{category}}</span>
                 <span class="product-price">${{price}}</span>
                 <span class="product-stock">Disponibles: {{stock}}</span>
-                <button data-product="{{_id}} {{@../cart}}" class="product-cart-button">Agregar al carrito</button>
+                <button data-product="{{_id}} {{@../cart}} {{@../token}}" class="product-cart-button">Agregar al carrito</button>
             </div>
         </div>
     {{/each}}

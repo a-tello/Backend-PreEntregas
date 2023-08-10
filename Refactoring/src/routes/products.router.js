@@ -12,8 +12,8 @@ router.get('/:pid', productController.getProductById)
 
 router.post('/' , jwtValidation, roleAuthorization('Admin'), productController.createProduct)
 
-router.put('/:pid', roleAuthorization('Admin'), productController.updateProduct)
+router.put('/:pid', jwtValidation, roleAuthorization('Admin'), productController.updateProduct)
 
-router.delete('/:pid', roleAuthorization('Admin'), productController.deleteProduct)
+router.delete('/:pid', jwtValidation, roleAuthorization('Admin'), productController.deleteProduct)
 
 export default router

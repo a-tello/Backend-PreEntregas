@@ -9,7 +9,8 @@ const router = Router()
 
 
 router.get('/login', (req, res) => {
-    if(req.cookies.Authorization) return res.redirect('/views/products')
+    console.log('COOKIES', req.cookies);
+    if(req.cookies?.Authorization) return res.redirect('/views/products')
    
     return res.render("login")
 })
@@ -27,8 +28,9 @@ router.get('/products', jwtValidation,
 
     const products = await productService.getAll({},{lean:true, leanWithId:false})
     const user = req.user
+    const token = req.cookies.Authorization
     console.log({user});
-    return res.render("products", {user, data: {products: products.payload, cart:'649d7397dbbd37853b9349d4'}})
+    return res.render("products", {user, data: {products: products.payload, cart: user.cart.toString(), token}})
 })
 
 router.get('/carts/:cid', jwtValidation, async (req, res) => {
