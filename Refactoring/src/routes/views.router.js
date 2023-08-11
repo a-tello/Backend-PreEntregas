@@ -3,13 +3,14 @@ import { productService } from "../services/products.services.js"
 import { cartService } from "../services/carts.services.js"
 import passport from "passport"
 import { jwtValidation, roleAuthorization } from "../middlewares/auth.middleware.js"
+import config from "../config.js"
+import jwt from 'jsonwebtoken'
 
 const router = Router()
 
 
 
 router.get('/login', (req, res) => {
-    console.log('COOKIES', req.cookies);
     if(req.cookies?.Authorization) return res.redirect('/views/products')
    
     return res.render("login")
@@ -19,6 +20,23 @@ router.get('/signup',  async (req, res) => {
     if(req.cookies?.Authorization) return res.redirect('/views/products')
 
     return res.render("signup")
+})
+
+router.get('/reset', (req, res) => {
+    res.render('reset')
+})
+
+router.get('/resetPassword', (req, res, next) => {
+    const { token } = req.query
+    try {
+        if(jwt.verify(token, config.secretKeyTkn)) {
+            res.cookie('Authorization', token.toString())
+            return res.render('newPassword')
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.send('El enlace ha expirado. Genere un nuevo enlace')
+    }
 })
 
 // JWT validation for all routes ↓

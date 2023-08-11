@@ -3,6 +3,7 @@ import { sessionController } from "../controllers/sessions.controller.js"
 import { jwtValidator } from "../middlewares/jwt.middleware.js"
 import passport from "passport"
 import '../passport/passportStrategies.js'
+import { jwtValidation } from "../middlewares/auth.middleware.js"
 
 
 const router = Router()
@@ -38,6 +39,9 @@ router.get('/current', jwtValidator, async (req, res) => {
         res.send('Unauthorized')
     }
 })
+
+router.post('/resetPassword', sessionController.resetPassword)
+router.post('/changePassword', jwtValidation, sessionController.updatePassword)
 router.get('/logout', sessionController.logout)
 
 export default router

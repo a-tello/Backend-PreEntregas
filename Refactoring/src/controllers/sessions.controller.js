@@ -28,6 +28,28 @@ class SessionController {
         }
     }
     
+    async resetPassword (req, res, next) {
+        
+        try {
+            await sessionService.sendResetLink(req.body.email)
+            return res.send("En su casilla de mail encontrará el link para resetear usu contraseña")
+        
+        } catch (error) {
+            console.log({error});            
+        }
+    }
+
+    async updatePassword (req, res, next) {
+        const { pass1, pass2 } = req.body
+        const { email } = req.user
+        try {
+            await sessionService.setNewPassword(email, pass1, pass2)
+            return res.send("Contraseña cambiada con exito")
+        
+        } catch (error) {
+            console.log({error});            
+        }
+    }
     /* router.get('/current', async (req, res) {
         try {
             const { authorization } = req.headers

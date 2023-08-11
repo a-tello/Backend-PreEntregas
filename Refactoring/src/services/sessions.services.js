@@ -1,5 +1,6 @@
 import { userManager } from "../DAL/DAOs/users/usersMongo.js"
 import { generateToken } from "../jwt.utils.js"
+import { transporter } from "../nodemailer.js";
 import { compareData, hashData } from "../utils.js"
 import { cartService } from "./carts.services.js";
 import { userService } from "./users.services.js"
@@ -42,6 +43,40 @@ class SessionService {
         } catch (error) {
             throw error
         }
+    }
+    
+    async sendResetLink (email) {
+        const user = await userService.getOneUserBy({email})
+        
+        if(!user.length) throw new Error('El mail ingresado no corresponde a ningún usuario registrado')
+            
+        const token = generateToken({user: {userID: user[0]._id, role: user[0].role}}, 60)
+        const linkToken = token.toString()
+        await transporter.sendMail({
+            from:'AQ Tienda',
+            to: user[0].email,
+            subject: 'Reseteo de contraseña',
+            text: `http://localhost:8080/views/resetPassword?token=${linkToken}`
+
+        })
+    }
+
+    async setNewPassword (email, password1, password2) {
+        const user = await userService.getOneUserBy({email})
+        const match = await compareData(password1, user[0].password)
+        
+        try {
+            if(match) throw new Error('La contraseña no puede coincidir con la anterior. Por favor, cambie su contraseña')
+            if(password1 !== password2) throw new Error('Las contraseñas deben coincidir')
+            const hashPassword = await hashData(password1)
+            await userService.updateUser({_id: user[0]._id}, {password: hashPassword})
+            
+            return 'La contraseña fue cambiada con éxito'
+        } catch (error) {
+            throw error
+        }
+    
+    
     }
     
     /* router.get('/current', async (req, res) {
