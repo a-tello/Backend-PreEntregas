@@ -15,7 +15,6 @@ class ProductController {
     
     async  getProductById (req, res) {
         const { pid } = req.params
-        console.log(pid);
         try {
             const product = await productService.getOneById(pid)
             res.status(200).json(product)
@@ -51,7 +50,6 @@ class ProductController {
         
         try {
             const deleteProduct = await productService.deleteOne(pid)
-            console.log({delete:deleteProduct});
             res.status(200).json(deleteProduct)
         } catch (err) {
             res.status(400).json(err)

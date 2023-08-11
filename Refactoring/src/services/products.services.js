@@ -1,4 +1,6 @@
+import { cartManager } from "../DAL/DAOs/carts/cartsMongo.js"
 import { productManager } from "../DAL/DAOs/products/productsMongo.js"
+import { cartService } from "./carts.services.js"
 
 class ProductService {
     async getAll (query, params) {
@@ -54,6 +56,24 @@ class ProductService {
         } catch (err) {
             throw err
         }
+    }
+
+    async isAvailable (id, quantity) {
+        const product = await productManager.getOneById(id)
+        return product.stock >= quantity
+    }
+
+    async getAvailableProducts (cartID) {
+        const getCart = await cartService.getCartById({_id:cartID})
+        const availableProducts = getCart.products.filter(product => product.product.stock >= product.quantity )
+        
+        for(let product of availableProducts) {
+            await cartService.deleteProductFromCart(cartID, product.product._id)
+            const newStock = product.product.stock - product.quantity
+            await productManager.updateOne(product.product._id, {stock: newStock})
+        }
+
+        return availableProducts
     }
 }
 

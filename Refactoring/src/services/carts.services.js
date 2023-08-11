@@ -31,12 +31,13 @@ class CartService {
     }
     
     async addProductToCart (cartID, productID, quantity = 1) {        
-        
         try{
-                
-            if(this.isProductInCart) {
+            console.log(await cartManager.getCart({_id:cartID, "products.product":productID}));
+            
+            if(await this.isProductInCart(cartID, productID)) {
+                console.log('Entra aca porque existe');
                 return await cartManager.updateCart({_id:cartID, "products.product":productID},
-                {$inc:{"products.$.quantity":quantity}}, {new:true})
+                {$inc:{"products.$.quantity":quantity}})
     
             } else {
                 return await cartManager.updateCart({_id:cartID},
@@ -87,7 +88,7 @@ class CartService {
     }
 
     async isProductInCart(cartID, productID) {
-        const cart = await cartManager.getCart({_id: cartID, "products.product": productID})
+        const cart =  await cartManager.getCart({_id: cartID, "products.product": productID})
         return cart.length
     }
 

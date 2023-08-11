@@ -27,7 +27,7 @@ class CartManager {
         }
     }
 
-    async updateCart(filter, action, opts) {
+    async updateCart(filter, action, opts={}) {
         try{
             return cartsModel.findOneAndUpdate(filter, action, opts)
         } catch(err) {
