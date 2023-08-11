@@ -25,6 +25,14 @@ class UserManager {
         }
     }    
 
+    async updateUser(filter, action){
+        try {
+            return await usersModel.updateOne(filter, action)
+        } catch (err) {
+            throw err
+        }
+    }    
+
     async deleteOne(id) {
         try {
             return await usersModel.findByIdAndDelete(id)

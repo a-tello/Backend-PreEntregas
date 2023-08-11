@@ -33,6 +33,14 @@ class UserService {
             throw err
         }
     }
+
+    async updateUser (filter, action) {
+        try {
+            return await userManager.updateUser(filter, action)
+        } catch (err) {
+            throw err
+        }
+    }
     
     isAdmin (email, password) {
         return email === config.admin_email && password === config.admin_password   
