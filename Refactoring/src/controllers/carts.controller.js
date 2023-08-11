@@ -28,14 +28,14 @@ class CartController {
     
     async addOneProductToCart (req,res) {
         const { cid, pid } = req.params
+        const user = req.user
         
         try {
-            await productService.getOneById(pid)
-            const cart = await cartService.addProductToCart(cid, pid)
+            const cart = await cartService.addProductToCart(cid, pid, user)
             res.status(200).json(cart)
         } catch (err) {
             console.log(err);
-            res.status(400).json(err)
+            res.status(400).json(err.message)
         }
     }
     

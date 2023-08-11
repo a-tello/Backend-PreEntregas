@@ -47,7 +47,7 @@ router.get('/products', jwtValidation,
     const products = await productService.getAll({},{lean:true, leanWithId:false})
     const user = req.user
     const token = req.cookies.Authorization
-    return res.render("products", {user, data: {products: products.payload, cart: user.cart.toString(), token}})
+    return res.render("products", {user, data: {products: products.payload, cart: user.cart?.toString(), token}})
 })
 
 router.get('/carts/:cid', jwtValidation, async (req, res) => {

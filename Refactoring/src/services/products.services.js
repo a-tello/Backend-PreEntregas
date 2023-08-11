@@ -1,6 +1,7 @@
 import { cartManager } from "../DAL/DAOs/carts/cartsMongo.js"
 import { productManager } from "../DAL/DAOs/products/productsMongo.js"
 import { cartService } from "./carts.services.js"
+import { userService } from "./users.services.js"
 
 class ProductService {
     async getAll (query, params) {
@@ -34,9 +35,18 @@ class ProductService {
         }
     }
     
-    async createOne (product) {
+    async createOne (product, owner) {
         try {
-            return await productManager.createOne(product)
+             
+            if(!product.owner || owner.role === 'Admin') {
+                const newProduct = {...product, owner: 'Admin'}
+                return await productManager.createOne(newProduct)
+            
+            } else {
+                const user = await userService.getOneUserBy({email: product.owner})
+                if(user[0].role !== owner.role) throw new Error('Owner must be a premium user')
+                return await productManager.createOne(product)
+            }
         } catch (err) {
             throw err
         }
@@ -50,8 +60,13 @@ class ProductService {
         }
     }
     
-    async deleteOne (id) {
+    async deleteOne (id, user) {
+
         try {
+            if(user.role === 'Premium'){ 
+                const product = await productManager.getOneById(id)
+                if(product.owner !== user.email) throw new Error('Premium users can only remove their own products')
+            }
             return await productManager.deleteOne(id)
         } catch (err) {
             throw err

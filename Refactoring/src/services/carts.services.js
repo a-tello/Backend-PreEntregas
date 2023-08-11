@@ -1,4 +1,5 @@
 import { cartManager } from "../DAL/DAOs/carts/cartsMongo.js"
+import { productService } from "./products.services.js"
 
 class CartService {
 
@@ -30,10 +31,15 @@ class CartService {
         }
     }
     
-    async addProductToCart (cartID, productID, quantity = 1) {        
+    async addProductToCart (cartID, productID, user={user: {role:''}}, quantity = 1) {        
         try{
-            console.log(await cartManager.getCart({_id:cartID, "products.product":productID}));
-            
+            const product = await productService.getOneById(productID)
+
+            console.log(user.role);
+            console.log(product.owner);
+            console.log(user.email);
+            if(user.role === 'Premium' && product.owner === user.email) throw new Error('Premium users cannot add their own products to cart')
+
             if(await this.isProductInCart(cartID, productID)) {
                 console.log('Entra aca porque existe');
                 return await cartManager.updateCart({_id:cartID, "products.product":productID},

@@ -25,11 +25,12 @@ class ProductController {
     
     async  createProduct (req, res) {
         const productData = req.body
+        const owner = req.user
         try {
-            const newProduct = await productService.createOne(productData)
+            const newProduct = await productService.createOne(productData, owner)
             res.status(201).json(newProduct)
         } catch (err) {
-            res.status(400).json(err)
+            res.status(400).json(err.message)
         }
     }
     
@@ -47,12 +48,13 @@ class ProductController {
     
     async  deleteProduct (req, res) {
         const { pid } = req.params
+        const user = req.user
         
         try {
-            const deleteProduct = await productService.deleteOne(pid)
+            const deleteProduct = await productService.deleteOne(pid, user)
             res.status(200).json(deleteProduct)
         } catch (err) {
-            res.status(400).json(err)
+            res.status(400).json(err.message)
         }
     }
 }

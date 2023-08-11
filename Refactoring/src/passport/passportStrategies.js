@@ -15,6 +15,7 @@ const tokenFromHeader = (req) => {
 
 const getJwt = (req) => {
     const token = req.cookies.Authorization || tokenFromHeader(req)
+    console.log('VERIFIED:', token);
     return token
 }
 

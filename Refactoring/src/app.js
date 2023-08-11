@@ -9,6 +9,7 @@ import cartRouter from "./routes/carts.router.js"
 import chatRouter from "./routes/chat.router.js"
 import sessionsRouter from "./routes/sessions.router.js"
 import viewsRouter from "./routes/views.router.js"
+import usersRouter from "./routes/users.router.js"
 
 import handlebars from 'express-handlebars'
 import cookieParser from 'cookie-parser'
@@ -41,6 +42,7 @@ app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 app.use('/chat', chatRouter)
 app.use('/api/sessions', sessionsRouter)
+app.use('/api/users', usersRouter)
 app.use('/views', viewsRouter)
 app.use('/', (req, res) => res.redirect('/views/login'))
 

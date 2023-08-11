@@ -8,7 +8,7 @@ router.get('/:cid', cartController.getCart)
 
 router.post('/', cartController.createCart)
 
-router.post('/:cid/product/:pid', jwtValidation, roleAuthorization('User'), cartController.addOneProductToCart)
+router.post('/:cid/product/:pid', jwtValidation, roleAuthorization('User', 'Premium'), cartController.addOneProductToCart)
 
 router.put('/:cid', jwtValidation, roleAuthorization('User'), cartController.addMultipleProductsToCart)
 
