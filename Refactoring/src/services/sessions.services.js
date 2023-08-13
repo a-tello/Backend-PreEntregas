@@ -21,6 +21,8 @@ class SessionService {
         
             if (!passwordMatch) throw new Error('Incorrect password')
 
+            await userService.updateLastConnection(email)
+
             return generateToken({user: {userID: user[0]._id, role: user[0].role}}, EXPIRATION_TIME_TOKEN)
             
         } catch (error) {

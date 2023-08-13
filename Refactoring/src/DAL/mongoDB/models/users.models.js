@@ -28,6 +28,16 @@ const usersSchema =  new mongoose.Schema({
     },
     role: {
         type: String
+    },
+    documents: [
+        {
+            name: {type: String},
+            reference: {type: String},
+             _id : false 
+        }
+    ],
+    last_connection: {
+        type: String
     }
 })
 
