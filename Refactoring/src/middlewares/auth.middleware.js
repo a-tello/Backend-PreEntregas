@@ -11,9 +11,9 @@ export const roleAuthorization =  (...roles) => {
 }
 export const jwtValidation =  (req, res, next) => {
         passport.authenticate('jwt', {session:false}, async (err, user, info) => {
-        console.log({err});
+        /* console.log({err});
         console.log({info});
-        console.log({user});
+        console.log({user}); */
         if(info) return next()
         if(!user) {console.log('entra al redirect del validation');return res.redirect('/')}
 

@@ -15,7 +15,6 @@ const tokenFromHeader = (req) => {
 
 const getJwt = (req) => {
     const token = req.cookies.Authorization || tokenFromHeader(req)
-    console.log('VERIFIED:', token);
     return token
 }
 
@@ -32,7 +31,6 @@ passport.use(new JWTstrategy(
             const err = new Error('Forbidden')
             return done(err, false)
         } 
-        console.log({token});
         if(token.user.role === 'Admin') return done(null, {role:'Admin', isLogged: true})
 
         const user = await userService.getOneUserBy({_id: token.user.userID})

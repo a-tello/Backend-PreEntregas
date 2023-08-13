@@ -35,13 +35,9 @@ class CartService {
         try{
             const product = await productService.getOneById(productID)
 
-            console.log(user.role);
-            console.log(product.owner);
-            console.log(user.email);
             if(user.role === 'Premium' && product.owner === user.email) throw new Error('Premium users cannot add their own products to cart')
 
             if(await this.isProductInCart(cartID, productID)) {
-                console.log('Entra aca porque existe');
                 return await cartManager.updateCart({_id:cartID, "products.product":productID},
                 {$inc:{"products.$.quantity":quantity}})
     

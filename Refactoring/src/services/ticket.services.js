@@ -3,7 +3,7 @@ import {ticketManager} from '../DAL/DAOs/ticket/ticketManager.js'
 class TicketService {
 
     async createTicket (email, products) {
-        console.log({products});
+        
         const code = await this.generateTicketCode()
         const amount = products.reduce((previous, current) => {
             const price = current.product.price * current.quantity

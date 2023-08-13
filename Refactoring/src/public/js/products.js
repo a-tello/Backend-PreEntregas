@@ -1,7 +1,6 @@
 const btn = document.getElementsByClassName("product-cart-button")
 
 const addProductToCart = async (cid, pid, token) => { 
-    console.log('Entra agregar');
     fetch(`http://localhost:8080/api/carts/${cid}/product/${pid}`, {
         method: "POST",
         headers: {
