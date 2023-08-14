@@ -35,6 +35,8 @@ class CartService {
         try{
             const product = await productService.getOneById(productID)
 
+            if(product.stock < quantity) throw new Error('Stock not available')
+
             if(user.role === 'Premium' && product.owner === user.email) throw new Error('Premium users cannot add their own products to cart')
 
             if(await this.isProductInCart(cartID, productID)) {

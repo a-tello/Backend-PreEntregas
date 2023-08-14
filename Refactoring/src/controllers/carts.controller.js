@@ -75,7 +75,7 @@ class CartController {
     }
     
     async emptyCart (req, res) {
-        const cid = req.params   
+        const {cid} = req.params   
     
         try {
         const cart = await cartService.clearCart(cid)
@@ -89,7 +89,6 @@ class CartController {
         const { email, cart } = req.user
 
         try {
-            
             
             const availableProducts =  await productService.getAvailableProducts(cart)
             const ticket = await ticketService.createTicket(email, availableProducts)    
