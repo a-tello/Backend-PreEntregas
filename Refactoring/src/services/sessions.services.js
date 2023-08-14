@@ -11,7 +11,7 @@ class SessionService {
     
     async loginUser (email, password) {
         try {
-            if(userService.isAdmin(email, password)) return generateToken({user: {role: 'Admin'}}, EXPIRATION_TIME_TOKEN)
+            if(userService.isAdmin(email, password)) return generateToken({user: {role: 'Admin', isAdmin:true}}, EXPIRATION_TIME_TOKEN)
                 
             const user = await userService.getOneUserBy({email})
             

@@ -1,3 +1,4 @@
+import userRes from "../DAL/DTOs/userRes.dto.js";
 import { userService } from "../services/users.services.js";
 
 class UserController {
@@ -22,6 +23,36 @@ class UserController {
             res.status(200).send('Agregados')
         } catch (err) {
             res.send(err.message)
+        }
+    }
+
+    async getUsers(req, res){
+        try {
+            const users = await userService.getAllUsers()
+            res.status(200).send(users)
+        } catch (error) {
+            res.status(400).send(error.message)
+        }
+        
+    }
+
+    async removeInactiveUsers(req, res) {
+        try {
+            const removedUsers = await userService.removeInactiveUsers()
+            res.status(200).send(`Removed users: ${removedUsers.length}`)
+        } catch (error) {
+            res.send(error.message)
+        }
+    }
+
+    async removeUser(req, res) {
+        console.log('remove controller');
+        const { uid } = req.params
+        try {
+            await userService.deleteUser(uid)
+            res.status(200).json({message:`User removed successfully`})
+        } catch (error) {
+            res.send(error.message)
         }
     }
     

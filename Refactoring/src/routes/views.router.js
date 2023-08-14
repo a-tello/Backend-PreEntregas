@@ -5,6 +5,8 @@ import passport from "passport"
 import { jwtValidation, roleAuthorization } from "../middlewares/auth.middleware.js"
 import config from "../config.js"
 import jwt from 'jsonwebtoken'
+import { userController } from "../controllers/users.controller.js"
+import { userService } from "../services/users.services.js"
 
 const router = Router()
 
@@ -46,8 +48,9 @@ router.get('/products', jwtValidation,
 
     const products = await productService.getAll({},{lean:true, leanWithId:false})
     const user = req.user
+    console.log({user});    
     const token = req.cookies.Authorization
-    return res.render("products", {user, data: {products: products.payload, cart: user.cart?.toString(), token}})
+    return res.render("products", {user, data: {products: products.payload, cart:   user.cart?.toString(), token}})
 })
 
 router.get('/carts/:cid', jwtValidation, async (req, res) => {
@@ -65,6 +68,14 @@ router.get('/profile', jwtValidation, async (req, res) => {
 
 router.get('/error', jwtValidation, async (req, res) => {
     return res.render("error")
+})
+
+router.get('/users', async (req, res) => { 
+
+    const users = await userService.getAllUsers()
+    const token = req.cookies.Authorization
+
+    return res.render("usersPanel", {users, token})
 })
 
 

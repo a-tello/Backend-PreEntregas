@@ -31,7 +31,7 @@ passport.use(new JWTstrategy(
             const err = new Error('Forbidden')
             return done(err, false)
         } 
-        if(token.user.role === 'Admin') return done(null, {role:'Admin', isLogged: true})
+        if(token.user.role === 'Admin') return done(null, {role:'Admin', isLogged: true, isAdmin: true})
 
         const user = await userService.getOneUserBy({_id: token.user.userID})
         const userResp = new userRes(user[0])

@@ -14,7 +14,7 @@ export const jwtValidation =  (req, res, next) => {
         /* console.log({err});
         console.log({info});
         console.log({user}); */
-        if(info) return next()
+        if(info) return next('ASDS')
         if(!user) {console.log('entra al redirect del validation');return res.redirect('/')}
 
         req.user = user

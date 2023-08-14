@@ -1,0 +1,42 @@
+<h1>PANEL DE USUARIOS</h1>
+{{#if users.length}}
+{{log users}}
+<div class='product-container'>
+    <div class="users-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Correo Electrónico</th>
+                    <th>Rol</th>
+
+                </tr>
+            </thead>
+    {{#each users}}
+            <tbody>
+                <tr>
+                    <td>{{username}}</td>
+                    <td>{{email}}</td>
+                    <td>{{role}}</td>
+                    <td>
+                        <a href="#" class="users-admin-button role-button" data-user="{{id}} {{../token}}">
+                            <img src="https://w7.pngwing.com/pngs/733/514/png-transparent-spanners-tool-adjustable-spanner-spanners-logo-angle-hand-silhouette.png" alt="role-img">
+                        </a>
+                    <td>
+                    <td>
+                        <a href="#" class="users-admin-button remove-button" data-user="{{id}} {{../token}}">
+                            <img src="https://png.pngtree.com/png-vector/20190420/ourmid/pngtree-delete-vector-icon-png-image_963444.jpg" alt="remove-img">
+                        </a>
+                    <td>
+                </tr>    
+            </tbody>
+    {{/each}}
+        </table>
+    </div>
+</div>
+{{else}}
+<h2>No hay usuarios para mostrar.</h2>
+{{/if}}
+
+
+

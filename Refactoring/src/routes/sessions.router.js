@@ -9,9 +9,9 @@ const router = Router()
 
 router.post('/login', function (req, res, next) {
       passport.authenticate('login', async (err, token, info) => {
-        /* console.log("err: ", err);
+        console.log("err: ", err);
         console.log("token: ", token);
-        console.log("info: ", info); */
+        console.log("info: ", info);
         res.cookie('Authorization', token, {httpOnly: true})
         
         if (err) {
