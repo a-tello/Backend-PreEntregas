@@ -14,8 +14,12 @@ export const jwtValidation =  (req, res, next) => {
         /* console.log({err});
         console.log({info});
         console.log({user}); */
-        if(info) return next('ASDS')
-        if(!user) {console.log('entra al redirect del validation');return res.redirect('/')}
+        if(info?.message === 'No auth token') {
+            req.user = {isLogged:false}
+            return next()
+        }
+
+        //if(!user) {console.log('entra al redirect del validation');return }
 
         req.user = user
         console.log('req.user', user);
