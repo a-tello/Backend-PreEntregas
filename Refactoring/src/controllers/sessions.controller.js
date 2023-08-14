@@ -1,8 +1,9 @@
+import passport from "passport";
 import { sessionService } from "../services/sessions.services.js"
 
 class SessionController {
     
-    async login (req, res) {
+    /* async login (req, res) {
         const { email, password } = req.body
         
         try {
@@ -14,8 +15,38 @@ class SessionController {
         } catch (error) {
             res.json({error: 'Usuario o contraseña incorrectos'})
         }
-    }
+    } */
+
+    async login (req, res, next) {
+            passport.authenticate('login', async (err, token, info) => {
+              console.log("err: ", err);
+              console.log("token: ", token);
+              console.log("info: ", info);
+              res.cookie('Authorization', token, {httpOnly: true})
+              
+              if (err) {
+                console.log('next error');
+              }
+      
+              return next()
+            })(req, res, next)
+    }  
+
+    async loginGithub () {
+        passport.authenticate('github', async (err, token, info) => {
+            console.log("err: ", err);
+            console.log("token: ", token);
+            console.log("info: ", info);
+            res.cookie('Authorization', token, {httpOnly: true})
+            
+            if (err) {
+            console.log('next error');
+            }
     
+            return next()
+        })(req, res, next)
+    }
+        
     async signup (req, res) {
         const user = req.body
         try {
