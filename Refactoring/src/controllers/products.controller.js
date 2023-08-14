@@ -51,8 +51,8 @@ class ProductController {
         const user = req.user
         
         try {
-            const deleteProduct = await productService.deleteOne(pid, user)
-            res.status(200).json(deleteProduct)
+            const deletedProduct = await productService.deleteOne(pid, user)
+            res.status(200).json(deletedProduct)
         } catch (err) {
             res.status(400).json(err.message)
         }

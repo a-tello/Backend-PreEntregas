@@ -1,14 +1,14 @@
-import userRes from "../DAL/DTOs/userRes.dto.js";
 import { userService } from "../services/users.services.js";
 
 class UserController {
 
     async updateRole(req, res) {
-        const { email, role } = req.user
+        const { uid } = req.params
+        const { role } = req.user
         try {
-            const newToken = userService.changeRole(email, role)
+            const newToken = await userService.changeRole(uid, role)
             console.log(newToken);
-            res.status(200).send('Role cambiado con exito')
+            res.status(200).json({message:'Role cambiado con exito'})
     } catch (error) {
             res.send(error.message)
         }

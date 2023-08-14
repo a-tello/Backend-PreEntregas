@@ -1,5 +1,6 @@
 import { cartManager } from "../DAL/DAOs/carts/cartsMongo.js"
 import { productManager } from "../DAL/DAOs/products/productsMongo.js"
+import { transporter } from "../nodemailer.js"
 import { cartService } from "./carts.services.js"
 import { userService } from "./users.services.js"
 
@@ -63,11 +64,26 @@ class ProductService {
     async deleteOne (id, user) {
 
         try {
+
             if(user.role === 'Premium'){ 
                 const product = await productManager.getOneById(id)
                 if(product.owner !== user.email) throw new Error('Premium users can only remove their own products')
             }
-            return await productManager.deleteOne(id)
+            const deletedProduct =  await productManager.deleteOne(id)
+            
+            if(deletedProduct.owner !== 'Admin'){
+                await transporter.sendMail({
+                    from:'AQ Tienda',
+                    to: deletedProduct.owner,
+                    subject: 'Producto eliminado',
+                    text: `Un producto de su propiedad ha sido eliminado.
+                    Detalles del producto:
+                    Nombre: ${deletedProduct.title}
+                    Descripción: ${deletedProduct.description}
+                    Código: ${deletedProduct.code}`    
+                })
+            }
+            return deletedProduct
         } catch (err) {
             throw err
         }

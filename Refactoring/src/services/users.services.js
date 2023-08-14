@@ -67,15 +67,21 @@ class UserService {
         return email === config.admin_email && password === config.admin_password   
     }
 
-    async changeRole(email, role) {
+    async changeRole(id, role) {
         try {
-            const user = await userManager.getOneUserBy({email})
+            let token = ''
+            const user = await userManager.getOneUserBy({_id:id})
             
-            const newRole = role === 'User'
+            if(role !== 'Admin'){
+                token = generateToken({user: {userID: id, role: newRole}}, EXPIRATION_TIME_TOKEN)
+
+            }
+
+            
+            const newRole = user[0].role === 'User'
                 ? 'Premium'
                 : 'User'
-            await userManager.updateUser({email}, {role: newRole})
-            const token = generateToken({user: {userID: user[0]._id, role: user[0].role}}, EXPIRATION_TIME_TOKEN)
+            await userManager.updateUser({_id:id}, {role: newRole})
             return token
         } catch (error) {
             throw error

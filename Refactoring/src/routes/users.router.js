@@ -5,7 +5,7 @@ import userRes from "../DAL/DTOs/userRes.dto.js";
 
 const router = Router()
 
-router.put('/premium/:uid', jwtValidation, roleAuthorization('User', 'Premium'), userController.updateRole)
+router.put('/premium/:uid', jwtValidation, userController.updateRole)
 
 router.post('/:uid/documents', jwtValidation, roleAuthorization('User'), userController.addDocuments)
 
