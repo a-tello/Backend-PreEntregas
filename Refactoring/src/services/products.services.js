@@ -1,4 +1,3 @@
-import { cartManager } from "../DAL/DAOs/carts/cartsMongo.js"
 import { productManager } from "../DAL/DAOs/products/productsMongo.js"
 import { transporter } from "../nodemailer.js"
 import { cartService } from "./carts.services.js"
@@ -8,6 +7,7 @@ class ProductService {
     async getAll (query, params) {
         try {
             const products = await productManager.getAll(query, params)
+            const {limit=10, sort=' '} = params
             return {
                 status: 'success',
                 payload: products.docs,
@@ -17,8 +17,8 @@ class ProductService {
                 page: products.page,
                 hasPrevPage: products.hasPrevPage,
                 hasNextPage: products.hasNextPage,
-                prevLink: `localhost:8080/products/`,
-                nextLink: `localhost:8080/products/`
+                prevLink: products.prevPage ? `http://localhost:8080/views/products?limit=${limit}&page=${products.prevPage}` : '#',
+                nextLink: products.nextPage ? `http://localhost:8080/views/products?limit=${limit}&page=${products.nextPage}` : '#'
             }
         } catch (err) {
             return {

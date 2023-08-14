@@ -6,6 +6,7 @@ import { cartService } from "./carts.services.js";
 import { userService } from "./users.services.js"
 
 const EXPIRATION_TIME_TOKEN = 600 // seconds
+const EXPIRATION_TIME_RESET_TOKEN = 1200 // seconds
 
 class SessionService {
     
@@ -83,7 +84,7 @@ class SessionService {
         
         if(!user.length) throw new Error('El mail ingresado no corresponde a ningún usuario registrado')
             
-        const token = generateToken({user: {userID: user[0]._id, role: user[0].role}}, 60)
+        const token = generateToken({user: {userID: user[0]._id, role: user[0].role}}, EXPIRATION_TIME_RESET_TOKEN)
         const linkToken = token.toString()
         await transporter.sendMail({
             from:'AQ Tienda',
@@ -104,7 +105,6 @@ class SessionService {
             const hashPassword = await hashData(password1)
             await userService.updateUser({_id: user[0]._id}, {password: hashPassword})
             
-            return 'La contraseña fue cambiada con éxito'
         } catch (error) {
             throw error
         }

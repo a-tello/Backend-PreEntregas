@@ -15,10 +15,9 @@ router.get('/reset', viewsController.reset)
 
 router.get('/resetPassword', viewsController.resetConfirmation)
 
-
 router.get('/products', viewsController.products)
 
-router.get('/carts/:cid', viewsController.cart)
+router.get('/carts/:cid', roleAuthorization('User', 'Premium'), viewsController.cart)
 
 router.get('/profile', viewsController.profile)
 

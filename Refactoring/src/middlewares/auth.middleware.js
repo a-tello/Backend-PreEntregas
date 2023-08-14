@@ -5,7 +5,7 @@ import passport from "passport";
 export const roleAuthorization =  (...roles) => {
     return (req, res, next) => {
         const matchRole = roles.includes(req.user.role)
-        if(!matchRole) return res.send('Unauthorized')
+        if(!matchRole) return res.render('error',{error:'Usted no está autorizado para realizar esta acción o acceder a este sitio'})
         return next()
     }
 }
