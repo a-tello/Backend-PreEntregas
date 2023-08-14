@@ -24,7 +24,48 @@ router.post('/login', function (req, res, next) {
     (req, res, next) => {
         res.redirect('/views/products')
     }
-  )
+    )
+
+/* router.post('/login/github', function (req, res, next) {
+      passport.authenticate('github', async (err, token, info) => {
+        console.log("err: ", err);
+        console.log("token: ", token);
+        console.log("info: ", info);
+        res.cookie('Authorization', token, {httpOnly: true})
+        
+        if (err) {
+          console.log('next error');
+        }
+
+        return next()
+      })(req, res, next)
+    },
+    (req, res, next) => {
+        res.redirect('/views/products')
+    }
+    ) */
+
+router.get('/login/github',passport.authenticate('github', { scope: [ 'user:email' ], session:false }));
+
+router.get('/github', function (req, res, next) {
+    passport.authenticate('github', async (err, token, info) => {
+      console.log("err: ", err);
+      console.log("token: ", token);
+      console.log("info: ", info);
+      res.cookie('Authorization', token, {httpOnly: true})
+      
+      if (err) {
+        console.log('next error');
+      }
+
+      return next()
+    })(req, res, next)
+  },(req, res, next) => {
+    res.redirect('/views/products')
+}
+)
+
+//passport.authenticate('github', { scope: [ 'user:email' ], session:false})
 
 router.post('/signup', passport.authenticate('signup', {session: false}), async (req, res) => {
     res.redirect('/views/login')

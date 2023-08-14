@@ -1,6 +1,7 @@
 import passport from 'passport'
 import { Strategy as LocalStrategy} from 'passport-local'
 import { Strategy as JWTstrategy} from 'passport-jwt'
+import { Strategy as GitHubStrategy} from 'passport-github2'
 import { sessionService } from '../services/sessions.services.js';
 import config from "../config.js"
 import { userService } from '../services/users.services.js';
@@ -74,5 +75,22 @@ passport.use('login', new LocalStrategy(
     }
     }
 ))
+
+passport.use('github', new GitHubStrategy(
+    {
+        clientID: config.github_clientID,
+        clientSecret: config.github_client_secret,
+        callbackURL: "http://localhost:8080/api/sessions/github"
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        const userToken = await sessionService.signupGithub(profile._json)
+        return done(null, userToken, { message: "Hey congrats you are logged in!" });
+    } catch (error) {
+        return done(error)
+    }
+    })
+)
+
 
 

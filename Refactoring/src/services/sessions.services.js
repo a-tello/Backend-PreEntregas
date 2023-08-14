@@ -29,6 +29,37 @@ class SessionService {
             throw error
         }
     }
+
+    async loginGitHub (email) {
+        try {
+            await userService.updateLastConnection(email)
+            const user = await userManager.getOneUserBy({email})
+
+            return generateToken({user: {userID: user[0]._id, role: user[0].role}}, EXPIRATION_TIME_TOKEN)
+            
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async signupGithub (profile) {
+        try {
+            const email = profile.email
+            
+            const registeredUser = await userService.getOneUserBy({email})
+
+            if(registeredUser.length) return await this.loginGitHub(email)
+
+            const firstname = profile.name.split(' ')[0]
+            const lastname = profile.name.split(' ')[1]
+            const newCart = await cartService.createOne()
+            await userManager.createUser({email, firstname, lastname, cart:newCart, role: 'User'})
+            
+            return await this.loginGitHub(email) 
+        } catch (error) {
+            throw error
+        }
+    }
     
     async signupUser (user) {
     
