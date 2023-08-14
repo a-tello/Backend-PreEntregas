@@ -2,7 +2,9 @@
 
     <nav>
         <div class="brand-logo-container">
-            <span>AQ PetShop</span>
+            <a href="/views/products" class="user-container">
+                <span>AQ PetShop</span>
+            </a>
         </div>
     {{#with user}}
     {{#if isAdmin}}
@@ -60,8 +62,16 @@
         </div>
     {{/each}}
     </div>
+    <div style="display:flex;align-self:center">
+        <button class="page-btn" onclick="location.href='{{data.prevLink}}'"><</button>
+        <button class="page-btn" onclick="location.href='{{data.nextLink}}'">></button>
+
+    </div>
+
     {{else}}
     <h2>No hay productos para mostrar.</h2>
     {{/if}}
     <p><strong>*Actualice para mostrar cambios</strong></p>
 </div>
+
+<script src='/js/products.js'><{{!}}/script>

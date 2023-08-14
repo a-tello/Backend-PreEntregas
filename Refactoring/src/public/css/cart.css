@@ -37,3 +37,25 @@
     display: flex;
     flex-direction: column;
 }
+
+.purchase-btn {
+    width: 200px;
+}
+
+.empty-cart-btn{
+    display: block;
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #fa0202;
+	border-radius: 5px;
+	color: #ff0000;
+	font-size: 16px;
+	cursor: pointer;
+	margin-bottom: 10px;
+}
+
+.empty-cart-btn:hover{
+	background-color: #e2e2e2;
+	border: 1px solid #ff0000;
+	font-size: 16px;
+}
