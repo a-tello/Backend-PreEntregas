@@ -20,3 +20,16 @@
   margin: 20px 10px;
     
 }
+
+.back-btn {
+    display: block;
+	width: 100%;
+	padding: 10px;
+	background-color: #4c4faf;
+	border: none;
+	border-radius: 5px;
+	color: #fff;
+	font-size: 16px;
+	cursor: pointer;
+	margin-bottom: 10px;
+}
