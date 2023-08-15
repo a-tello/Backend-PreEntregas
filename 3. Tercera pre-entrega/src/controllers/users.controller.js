@@ -5,7 +5,6 @@ export const loginUser = async (req, res, next) => {
     if(token){
         res.cookie('Authorization', token.toString())
         // log para copiar al header
-        console.log(token);
         return res.redirect('/views/products')
     }
     res.cookie('error', 'Usuario o contraseña incorrectos')

@@ -1,0 +1,171 @@
+paths:
+  /api/carts:
+    post:
+      sumary: Create one empty cart
+      responses:
+        '201':
+          description: Cart created successfully
+        '500':
+          description: Server error
+      tags:
+        - Carts
+
+  /api/carts/{id}:
+    get:
+      sumary: Get one cart by ID
+      parameters:
+        - name: id
+          in: path
+          description: Cart identifier
+
+      responses:
+        '200':
+          description: Cart found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cart'
+        '400':
+          description: Cart not found
+        '500':
+          description: Server error
+      tags:
+        - Carts
+
+    put:
+      sumary: Add products to cart
+      parameters:
+        - name: id
+          in: path
+          description: Cart identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  product:
+                    type: integer
+                  quantity: 
+                    type: integer
+      responses:
+        '201':
+          description: Products added successfully to cart
+        '400':
+          description: Error. Cart doesn't exist.
+        '500':
+          description: Server error
+      tags:
+        - Carts
+
+    delete:
+      sumary: Empty one cart
+      parameters:
+        - name: id
+          in: path
+          description: Cart identifier
+      responses:
+        '204':
+          description: Cart empty successfully
+        '400':
+          description: Error. Cart not found.
+        '500':
+          description: Server error
+      tags:
+        - Carts
+
+
+  /api/carts/{cartID}/product/{productID}:
+    post:
+      security: 
+        - bearerAuth: []
+      sumary: Add one product to cart
+      parameters:
+        - name: cartID
+          in: path
+          description: Cart identifier
+        - name: productID
+          in: path
+          description: Product identifier
+      responses:
+        '201':
+          description: Product added successfully 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cart'
+        '400':
+          description: Error. Missing info
+        '500':
+          description: Server error
+      tags:
+        - Carts
+
+    put:
+      sumary: Update quantity of product in cart
+      parameters:
+        - name: cartID
+          in: path
+          description: Cart identifier
+        - name: productID
+          in: path
+          description: Product identifier
+      responses:
+        '201':
+          description: Product updated successfully 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cart'
+        '400':
+          description: Error. Missing info
+        '500':
+          description: Server error
+      tags:
+        - Carts
+
+    delete:
+      sumary: Remove one product from cart
+      parameters:
+        - name: cartID
+          in: path
+          description: Cart identifier
+        - name: productID
+          in: path
+          description: Product identifier
+      responses:
+        '204':
+          description: Product removed successfully from cart.
+        '400':
+          description: Error. The product doesn't exist.
+        '500':
+          description: Server error
+      tags:
+        - Carts
+
+
+components:
+  
+  schemas:
+    cart:
+      type: object
+      properties:
+        products: 
+          type: array
+          items:
+            type: object
+            properties: 
+              product:
+                $ref: '#/components/schemas/product' 
+              quantity: 
+                type: integer
+  
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

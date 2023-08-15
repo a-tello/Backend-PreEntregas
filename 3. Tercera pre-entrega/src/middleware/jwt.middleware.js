@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 import config from "../config.js"
 
-export const jwtValidator = (req, res, next) => {
+/* export const jwtValidator = (req, res, next) => {
     try {
         const token = req.cookies.Authorization
         const validateUser = jwt.verify(token, config.secretKeyTkn)
@@ -13,7 +13,7 @@ export const jwtValidator = (req, res, next) => {
     } catch (error) {
         res.status(401).json(error);
     }
-}
+} */
 
 export const verifyTokenAdmin = (req, res, next) => {
     try {

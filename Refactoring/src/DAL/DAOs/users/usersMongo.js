@@ -1,29 +1,45 @@
 import { usersModel } from '../../mongoDB/models/users.models.js'
 
-export default class UsersManager {
-    async getAll(){
+class UserManager {
+    async getAllUsers(filter){
         try {
-            return await usersModel.find()
+            return await usersModel.find(filter)
         } catch (err) {
             throw err
         }
     }
 
-    async getOneById(id){
+    async getOneUserBy(filter){
         try {
-            return await usersModel.findById(id)
+            return await usersModel.find(filter)
         } catch (err) {
             throw err
         }
     }
 
-    async createOne(obj){
+    async createUser(obj){
         try {
             return await usersModel.create(obj)
         } catch (err) {
             throw err
         }
-    }
+    }    
 
-    
+    async updateUser(filter, action){
+        try {
+            return await usersModel.updateOne(filter, action)
+        } catch (err) {
+            throw err
+        }
+    }    
+
+    async deleteOne(id) {
+        try {
+            return await usersModel.findByIdAndDelete(id)
+        } catch (error) {
+            throw error
+        }
+    }
 }
+
+export const userManager = new UserManager()

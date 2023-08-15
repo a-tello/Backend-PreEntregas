@@ -1,97 +1,46 @@
 import { cartsModel } from '../../mongoDB/models/carts.model.js'
 
 class CartManager {
-    async createOne (products) {
+    
+    async createOne (obj) {
         try {
-            return await cartsModel.create({products}) 
+            return await cartsModel.create({obj}) 
         } catch(err) {
-            err.code = 400
             throw err
         }
-
     }
 
-    async getCart(args) {
+    async getCart(filter={}) {
         try {
-            return await cartsModel.find({args}) 
-        } catch {
-            const error = new Error('Carts not found')
-            error.code = 404 
+            return await cartsModel.find(filter).populate('products.product').lean()
+        } catch(error) {
             throw error
         }
     }
 
-    async getCarts() {
-
+       async getCartById(cartId) {
         try {
-            const carts = await cartsModel.find()
-            return carts
-        } catch {
-            const error = new Error('Carts not found')
-            error.code = 404 
-            throw error
-        }
-    }
-
-    async getCartById(cartId) {
-        try {
-            const cart = await cartsModel.findById(cartId).populate('products.product').lean()
-            return cart
-        } catch(err) {
-            err.message = `Cart with id ${cartId} not found`
-            err.code = 404
-            throw err
-        }
-    }
-
-
-    async addProductToCart(query, action) {        
-        try{
-            const cart = cartsModel.findOneAndUpdate(query, action, {new: true})
-            return cart
-        } catch(err) {
-            throw err
-        }   
-    }
-
-    async addProductsToCart(cartId, products) {
-        try{
-            const cart = await cartsModel.findOneAndUpdate(cartId, products, {new: true})
-            return cart
+            return await cartsModel.findById(cartId).populate('products.product').lean()
         } catch(err) {
             throw err
         }
-
     }
 
-    async updateProductQuantityFromCart(cartId, product, newQuantity) {
-
+    async updateCart(filter, action, opts={}) {
         try{
-            const cart = await cartsModel.updateOne(cartId, product, newQuantity, {new: true})
-            return cart
+            return cartsModel.findOneAndUpdate(filter, action, opts)
         } catch(err) {
             throw err
         }  
     }
 
-    async deleteProductFromCart(cartId, productId) {
-
+    async deleteOne(cartId){
         try {
-            const cart = await cartsModel.updateOne(cartId, productId, {new: true})
-            return cart
-        } catch (err) {
-            throw err
-        }
-    }
-
-    async clearCart(cartId, field) {
-        
-        try {
-            await cartsModel.updateOne(cartId, field)
+            await cartsModel.findByIdAndDelete(cartId)
         } catch (err) {
             throw err
         }
     }
 }
 
-export default CartManager
+export const cartManager = new CartManager()

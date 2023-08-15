@@ -1,0 +1,27 @@
+.ticket {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 300px;
+    margin: 0 auto;
+  }
+
+  .ticket-header {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .ticket-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .ticket-item span {
+    font-weight: bold;
+  }
+
+  .ticket-total {
+    margin-top: 20px;
+    text-align: right;
+  }
