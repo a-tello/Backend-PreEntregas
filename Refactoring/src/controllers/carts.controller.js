@@ -1,4 +1,3 @@
-import { productManager } from "../DAL/DAOs/products/productsMongo.js"
 import { cartService } from "../services/carts.services.js"
 import { productService } from "../services/products.services.js"
 import { ticketService } from "../services/ticket.services.js"
@@ -32,9 +31,8 @@ class CartController {
         
         try {
             const cart = await cartService.addProductToCart(cid, pid, user)
-            res.status(200).json(cart)
+            res.status(200).json({message: 'Product added successfully', cart})
         } catch (err) {
-            console.log(err);
             res.status(400).json(err.message)
         }
     }
@@ -92,7 +90,8 @@ class CartController {
             
             const availableProducts =  await productService.getAvailableProducts(cart)
             const ticket = await ticketService.createTicket(email, availableProducts)    
-            res.json({ticket})
+            console.log({ticket});
+            res.render('ticket', {code: ticket.code.toString(), amount: ticket.amount.toString(), purchase_datetime: ticket.purchase_datetime.toJSON()})
         } catch (error) {
             throw error
         }

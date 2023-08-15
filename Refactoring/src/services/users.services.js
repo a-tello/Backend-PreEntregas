@@ -54,8 +54,6 @@ class UserService {
     }
 
     async deleteUser (id) {
-        console.log('remove service');
-        console.log({id});
         try {
             return await userManager.deleteOne(id)
         } catch (err) {

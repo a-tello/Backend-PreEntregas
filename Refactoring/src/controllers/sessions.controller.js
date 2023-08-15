@@ -1,21 +1,20 @@
 import passport from "passport";
 import { sessionService } from "../services/sessions.services.js"
+import userRes from "../DAL/DTOs/userRes.dto.js";
 
 class SessionController {
     
     async login (req, res, next) {
             passport.authenticate('login', async (err, token, info) => {
-              console.log("err: ", err);
-              console.log("token: ", token);
-              console.log("info: ", info);
-              res.cookie('Authorization', token, {httpOnly: true})
-            
+
+                res.cookie('Authorization', token, {httpOnly: true})
+                console.log({token});
               
-              if (err) {
-                return res.render('error', {error: err.message})
-              }
-      
-              return next()
+                if (err) {
+                    return res.render('error', {error: err.message})
+                }
+        
+                return next()
             })(req, res, next)
     }  
 
@@ -37,7 +36,7 @@ class SessionController {
             res.cookie('Authorization', token, {httpOnly: true})
             
             if (err) {
-            console.log('next error');
+                throw new Error(err.message)
             }
     
             return next()
@@ -72,6 +71,14 @@ class SessionController {
     async logout(req, res) {
         res.clearCookie('Authorization')
         res.redirect('/views/login')
+    }
+
+    async current (req, res) {
+        if(req.user.role === 'Admin') return res.status(200).json({...req.user})
+
+        const user = new userRes(req.user)
+        return res.status(200).json({user:{...user}})
+        
     }
 }    
 

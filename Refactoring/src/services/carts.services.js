@@ -41,7 +41,7 @@ class CartService {
 
             if(await this.isProductInCart(cartID, productID)) {
                 return await cartManager.updateCart({_id:cartID, "products.product":productID},
-                {$inc:{"products.$.quantity":quantity}})
+                {$inc:{"products.$.quantity":quantity}}, {new:true})
     
             } else {
                 return await cartManager.updateCart({_id:cartID},

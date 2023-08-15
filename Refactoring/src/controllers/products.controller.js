@@ -9,7 +9,7 @@ class ProductController {
             const products = await productService.getAll(query, {limit, page, sort})
             res.status(200).json(products)
         } catch (err) {
-            res.status(400).json(err)
+            res.status(400).json({error: err.message})
         }
     }
     
@@ -19,7 +19,7 @@ class ProductController {
             const product = await productService.getOneById(pid)
             res.status(200).json(product)
         } catch (err) {
-            res.status(400).json(err)
+            res.status(400).json({error: err.message})
         }
     }
     
@@ -28,9 +28,9 @@ class ProductController {
         const owner = req.user
         try {
             const newProduct = await productService.createOne(productData, owner)
-            res.status(201).json(newProduct)
+            res.status(201).json({message: 'Product created successfully', product: newProduct})
         } catch (err) {
-            res.status(400).json(err.message)
+            res.status(400).json({error: err.message})
         }
     }
     
@@ -40,9 +40,9 @@ class ProductController {
     
         try {
             const updatedProduct = await productService.updateOne(pid, updatedProductData)
-            res.status(200).json(updatedProduct)
+            res.status(200).json({message: 'Product modified successfully', product: updatedProduct})
         } catch (err) {
-            res.status(400).json(err)
+            res.status(400).json({error: err.message})
         }
     }
     
@@ -51,10 +51,10 @@ class ProductController {
         const user = req.user
         
         try {
-            const deletedProduct = await productService.deleteOne(pid, user)
-            res.status(200).json(deletedProduct)
+            await productService.deleteOne(pid, user)
+            res.status(200).json({message: `Product ${pid} removed successfully`})
         } catch (err) {
-            res.status(400).json(err.message)
+            res.status(400).json({error: err.message})
         }
     }
 }

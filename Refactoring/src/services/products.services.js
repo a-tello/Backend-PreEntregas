@@ -55,7 +55,9 @@ class ProductService {
     
     async updateOne (id, data) {
         try {
-            return await productManager.updateOne(id, data, {new:true})
+            const modifiedProduct = await productManager.updateOne(id, data, {new:true})
+            if(!modifiedProduct) throw new Error(`Product ${id} doesn't exist`)
+            return modifiedProduct
         } catch (err) {
             throw err
         }
@@ -70,6 +72,8 @@ class ProductService {
                 if(product.owner !== user.email) throw new Error('Premium users can only remove their own products')
             }
             const deletedProduct =  await productManager.deleteOne(id)
+
+            if(!deletedProduct) throw new Error(`Product ${id} doesn't exist`)
             
             if(deletedProduct.owner !== 'Admin'){
                 await transporter.sendMail({

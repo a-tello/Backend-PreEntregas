@@ -24,4 +24,6 @@ router.post('/changePassword', jwtValidation, sessionController.updatePassword)
 
 router.get('/logout', jwtValidation, sessionController.logout)
 
+router.get('/current', jwtValidation, sessionController.current)
+
 export default router
