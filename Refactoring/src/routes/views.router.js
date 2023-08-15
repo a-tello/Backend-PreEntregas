@@ -21,12 +21,6 @@ router.get('/carts/:cid', roleAuthorization('User', 'Premium'), viewsController.
 
 router.get('/profile', viewsController.profile)
 
-/* router.get('/error', async (req, res) => {
-    if(!(req.user?.isLogged)) return res.redirect('/')
-
-    return res.render("error")
-}) */
-
 router.get('/users', roleAuthorization('Admin'), viewsController.usersPanel)
 
 

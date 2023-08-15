@@ -68,19 +68,29 @@ class UserService {
     async changeRole(id, role) {
         try {
             let token = ''
+            const necessaryDocs = ['doc-id', 'doc-proof-address', 'doc-acc-status']
             const user = await userManager.getOneUserBy({_id:id})
-            
-            if(role !== 'Admin'){
-                token = generateToken({user: {userID: id, role: newRole}}, EXPIRATION_TIME_TOKEN)
 
-            }
+            const uploadDocuments = user[0].documents.map(document => {
+                return document.name
+            })
 
+            const allDocs = necessaryDocs.every(doc => 
+                    uploadDocuments.includes(doc)
+            )
+                        
+            if(!allDocs) throw new Error('Missing documentation')
             
             const newRole = user[0].role === 'User'
                 ? 'Premium'
                 : 'User'
             await userManager.updateUser({_id:id}, {role: newRole})
-            return token
+
+            if(role !== 'Admin'){
+                token = generateToken({user: {userID: id, role: newRole}}, EXPIRATION_TIME_TOKEN)
+            }
+            
+            return token 
         } catch (error) {
             throw error
         }
@@ -88,8 +98,14 @@ class UserService {
         
     async addDocumentsToUser (uid, files) {
         try {
-            for(let file of files['docs']){
-                await userManager.updateOne(uid, {$push:{"documents":{name: file.originalname , reference:file.filename}}})
+            const necessaryDocs = ['doc-id', 'doc-proof-address', 'doc-acc-status']
+            
+            for(let doc of necessaryDocs){
+                if(files[doc]){
+                    let file = files[doc][0]
+                    console.log(file.fieldname);
+                    await userManager.updateUser({_id:uid}, {$push:{"documents":{name: file.fieldname , reference:file.filename}}})
+                }
             }
             return
         } catch (err) {

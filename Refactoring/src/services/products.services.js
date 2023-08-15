@@ -45,6 +45,7 @@ class ProductService {
             
             } else {
                 const user = await userService.getOneUserBy({email: product.owner})
+                if(!user[0]) throw new Error('Owner must be a premium user')
                 if(user[0].role !== owner.role) throw new Error('Owner must be a premium user')
                 return await productManager.createOne(product)
             }

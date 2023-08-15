@@ -9,7 +9,7 @@ class UserController {
             const newToken = await userService.changeRole(uid, role)
             res.status(200).json({message:'Role cambiado con exito'})
     } catch (error) {
-            res.send(error.message)
+            res.send({error: error.message})
         }
     }
 
@@ -19,9 +19,9 @@ class UserController {
         
         try {
             await userService.addDocumentsToUser(uid, files)
-            res.status(200).send('Agregados')
+            res.status(200).json({msg: 'Documents added successfully'})
         } catch (err) {
-            res.send(err.message)
+            res.send({error: err.message})
         }
     }
 

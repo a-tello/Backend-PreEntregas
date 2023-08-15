@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { jwtValidation, roleAuthorization } from "../middlewares/auth.middleware.js";
 import { userController } from "../controllers/users.controller.js";
-import userRes from "../DAL/DTOs/userRes.dto.js";
+import { userUpload } from "../middlewares/multer.middleware.js";
 
 const router = Router()
 
-router.put('/premium/:uid', jwtValidation, userController.updateRole)
+router.put('/premium/:uid', jwtValidation, roleAuthorization('User', 'Admin'), userController.updateRole)
 
-router.post('/:uid/documents', jwtValidation, roleAuthorization('User'), userController.addDocuments)
+router.post('/:uid/documents', jwtValidation, roleAuthorization('User'), userUpload, userController.addDocuments)
 
 router.get('/', jwtValidation, roleAuthorization('Admin'),userController.getUsers)
 

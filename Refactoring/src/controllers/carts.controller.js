@@ -33,7 +33,7 @@ class CartController {
             const cart = await cartService.addProductToCart(cid, pid, user)
             res.status(200).json({message: 'Product added successfully', cart})
         } catch (err) {
-            res.status(400).json(err.message)
+            res.status(400).json({error: err.message})
         }
     }
     
@@ -45,7 +45,7 @@ class CartController {
             const cart = await cartService.addProductsToCart(cid, products)
             res.status(200).json({message:'Products added successfully', cart})
         } catch (err) {
-            res.status(400).json(err)
+            res.status(400).json({error: err.message})
         }
     }
     
