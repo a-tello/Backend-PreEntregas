@@ -3,7 +3,7 @@ import '../src/DAL/mongoDB/dbConfig.js'
 import { cartManager } from '../src/DAL/DAOs/carts/cartsMongo.js'
 import { productManager } from '../src/DAL/DAOs/products/productsMongo.js'
 
-/* describe('Test de DAO de carts', () => {
+describe('Test de DAO de carts', () => {
 
     let cartID
     const product1 = '643c8ee6fb29b113057e781c'
@@ -140,7 +140,7 @@ import { productManager } from '../src/DAL/DAOs/products/productsMongo.js'
     })
     
 })
- */
+
 describe('Test DAO products', () => {
 
     let productID
