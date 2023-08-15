@@ -7,6 +7,7 @@ class UserController {
         const { role } = req.user
         try {
             const newToken = await userService.changeRole(uid, role)
+            console.log({newToken});
             res.status(200).json({message:'Role cambiado con exito'})
     } catch (error) {
             res.send({error: error.message})

@@ -1,6 +1,7 @@
 import passport from "passport";
 import { sessionService } from "../services/sessions.services.js"
 import userRes from "../DAL/DTOs/userRes.dto.js";
+import { userService } from "../services/users.services.js";
 
 class SessionController {
     
@@ -69,6 +70,10 @@ class SessionController {
     }
 
     async logout(req, res) {
+        const user = req.user
+        if(user.role !== 'Admin'){
+            await userService.updateLastConnection(user.email)
+        }
         res.clearCookie('Authorization')
         res.redirect('/views/login')
     }

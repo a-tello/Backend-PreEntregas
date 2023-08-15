@@ -15,4 +15,5 @@ router.delete('/', jwtValidation, roleAuthorization('Admin'), userController.rem
 
 router.delete('/:uid', jwtValidation, roleAuthorization('Admin'), userController.removeUser)
 
+
 export default router

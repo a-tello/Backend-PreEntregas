@@ -14,8 +14,8 @@ const tokenFromHeader = (req) => {
     return token
 }
 
-const getJwt = (req) => {
-    const token = req.cookies.Authorization || tokenFromHeader(req)
+const getJwt = (req) => {    
+    const token = tokenFromHeader(req) || req.cookies?.Authorization 
     return token
 }
 

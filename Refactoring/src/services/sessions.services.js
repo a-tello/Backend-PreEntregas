@@ -112,18 +112,7 @@ class SessionService {
     
     }
     
-    /* router.get('/current', async (req, res) {
-        try {
-            const { authorization } = req.headers
-            const validateUser = jwt.verify(authorization, config.secretKeyTkn)
-            const user = await userManager.getOneById(validateUser.userID)
-            res.send(user)
-            
-        } catch (error) {
-            res.send('Unauthorized')
-        }
-    }) */
-    
+   
 
 }    
 

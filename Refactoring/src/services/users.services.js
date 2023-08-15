@@ -4,7 +4,7 @@ import config from "../config.js"
 import { generateToken } from '../jwt.utils.js'
 
 const EXPIRATION_TIME_TOKEN = 600
-const INACTIVITY_TIME = 2592000000
+const INACTIVITY_TIME = 300000//2592000000
 
 const adminUser = {
     firstname: 'Admin',
@@ -123,12 +123,14 @@ class UserService {
             const users = await userManager.getAllUsers({})
             let removedUsers = []
             for(const user of users){
-                if(user.last_connection - Date.now() > INACTIVITY_TIME) {
+                let inactivityTime = Date.now() - user.last_connection 
+                if(inactivityTime > INACTIVITY_TIME) {
                     const username = user.firstname[0].toUpperCase() + user.lastname.toUpperCase()
                     removedUsers.push(username)
                     await userManager.deleteOne({_id: user._id})
                 }
             }
+            return removedUsers
         } catch (error) {
             throw error
         }
