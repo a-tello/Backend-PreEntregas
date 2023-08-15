@@ -1,9 +1,9 @@
 import config from "../config.js";
+import jwt from 'jsonwebtoken'
+
 import { cartService } from "../services/carts.services.js";
 import { productService } from "../services/products.services.js"
-import jwt from 'jsonwebtoken'
 import { userService } from "../services/users.services.js";
-import { sessionController } from "./sessions.controller.js";
 
 class ViewsController {
     

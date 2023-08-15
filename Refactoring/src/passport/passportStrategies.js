@@ -1,11 +1,12 @@
 import passport from 'passport'
+import config from "../config.js"
+import userRes from '../DAL/DTOs/userRes.dto.js';
+
 import { Strategy as LocalStrategy} from 'passport-local'
 import { Strategy as JWTstrategy} from 'passport-jwt'
 import { Strategy as GitHubStrategy} from 'passport-github2'
 import { sessionService } from '../services/sessions.services.js';
-import config from "../config.js"
 import { userService } from '../services/users.services.js';
-import userRes from '../DAL/DTOs/userRes.dto.js';
 
 
 const tokenFromHeader = (req) => {
@@ -18,7 +19,6 @@ const getJwt = (req) => {
     const token = tokenFromHeader(req) || req.cookies?.Authorization 
     return token
 }
-
 
 passport.use(new JWTstrategy(
       {

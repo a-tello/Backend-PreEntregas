@@ -1,6 +1,7 @@
 import passport from "passport";
-import { sessionService } from "../services/sessions.services.js"
 import userRes from "../DAL/DTOs/userRes.dto.js";
+
+import { sessionService } from "../services/sessions.services.js"
 import { userService } from "../services/users.services.js";
 
 class SessionController {

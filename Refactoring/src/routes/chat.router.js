@@ -1,6 +1,6 @@
+import MessagesManager from "../DAL/DAOs/messages/messagesMongo.js"
 import { Router } from "express"
 import { httpServer } from "../app.js"
-import MessagesManager from "../DAL/DAOs/messages/messagesMongo.js"
 import { Server } from 'socket.io'
 import { jwtValidation, roleAuthorization } from "../middlewares/auth.middleware.js"
 

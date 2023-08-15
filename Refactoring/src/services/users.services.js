@@ -1,6 +1,7 @@
-import { userManager } from '../DAL/DAOs/users/usersMongo.js' 
-import userRes from '../DAL/DTOs/userRes.dto.js'
 import config from "../config.js"
+import userRes from '../DAL/DTOs/userRes.dto.js'
+
+import { userManager } from '../DAL/DAOs/users/usersMongo.js' 
 import { generateToken } from '../jwt.utils.js'
 
 const EXPIRATION_TIME_TOKEN = 1200 //20 minutos

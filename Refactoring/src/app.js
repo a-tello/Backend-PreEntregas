@@ -42,7 +42,6 @@ app.engine('handlebars', handlebars.engine(
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
 
-
 app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 app.use('/chat', chatRouter)
@@ -51,7 +50,6 @@ app.use('/api/users', usersRouter)
 app.use('/views', viewsRouter)
 app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerSetup))
 app.use('/', (req, res) => res.redirect('/views/login'))
-
 
 export const httpServer = app.listen(PORT,() => console.log(`Listen on port ${PORT}`))
     

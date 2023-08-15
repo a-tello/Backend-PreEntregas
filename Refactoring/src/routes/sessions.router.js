@@ -1,7 +1,8 @@
+import '../passport/passportStrategies.js'
+import passport from "passport"
+
 import { Router } from "express"
 import { sessionController } from "../controllers/sessions.controller.js"
-import passport from "passport"
-import '../passport/passportStrategies.js'
 import { jwtValidation } from "../middlewares/auth.middleware.js"
 
 

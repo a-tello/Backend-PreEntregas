@@ -4,8 +4,6 @@ import { jwtValidation, roleAuthorization } from "../middlewares/auth.middleware
 
 const router = Router()
 
-//router.use(jwtValidation)
-
 router.get('/', productController.getProducts)
 
 router.get('/:pid', productController.getProductById)
