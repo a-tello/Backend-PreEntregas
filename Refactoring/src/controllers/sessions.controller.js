@@ -49,7 +49,7 @@ class SessionController {
         
         try {
             await sessionService.sendResetLink(req.body.email)
-            return res.render('success', {msg:"En su casilla de mail encontrará el link para resetear su contraseña"})
+            return res.status(200).render('success', {msg:"En su casilla de mail encontrará el link para resetear su contraseña"})
         
         } catch (err) {
             return res.render('error', {error: err.message})            

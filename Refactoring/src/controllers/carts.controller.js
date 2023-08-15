@@ -15,11 +15,11 @@ class CartController {
     }
     
     async getCart (req,res) {
-        const { id } = req.params
+        const { cid } = req.params
     
         try {
-            const cart = await cartService.getCartById(id)
-            res.status(200).json(cart)
+            const cart = await cartService.getCartById(cid)
+            res.status(200).json({cart})
         } catch (err) {
             res.status(400).json(err)
         }
@@ -38,11 +38,13 @@ class CartController {
     }
     
     async addMultipleProductsToCart (req,res) {
-        const cid = req.params
+        const {cid} = req.params
+        const user = req.user
         const products = req.body
         
         try {
-            const cart = await cartService.addProductsToCart(cid, products)
+            await cartService.addProductsToCart(cid, products, user)
+            const cart = await cartService.getCartById(cid)
             res.status(200).json({message:'Products added successfully', cart})
         } catch (err) {
             res.status(400).json({error: err.message})
@@ -90,7 +92,6 @@ class CartController {
             
             const availableProducts =  await productService.getAvailableProducts(cart)
             const ticket = await ticketService.createTicket(email, availableProducts)    
-            console.log({ticket});
             res.render('ticket', {code: ticket.code.toString(), amount: ticket.amount.toString(), purchase_datetime: ticket.purchase_datetime.toJSON()})
         } catch (error) {
             throw error

@@ -5,8 +5,8 @@ import { compareData, hashData } from "../utils.js"
 import { cartService } from "./carts.services.js";
 import { userService } from "./users.services.js"
 
-const EXPIRATION_TIME_TOKEN = 600 // seconds
-const EXPIRATION_TIME_RESET_TOKEN = 1200 // seconds
+const EXPIRATION_TIME_TOKEN = 1200 // 20 minutos
+const EXPIRATION_TIME_RESET_TOKEN = 1200 // 20 minutos
 
 class SessionService {
     

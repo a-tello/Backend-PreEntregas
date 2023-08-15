@@ -3,15 +3,8 @@ import userRes from '../DAL/DTOs/userRes.dto.js'
 import config from "../config.js"
 import { generateToken } from '../jwt.utils.js'
 
-const EXPIRATION_TIME_TOKEN = 600
-const INACTIVITY_TIME = 300000//2592000000
-
-const adminUser = {
-    firstname: 'Admin',
-    lastname: 'Coder',
-    role: 'Admin',
-    email: config.admin_email,
-}
+const EXPIRATION_TIME_TOKEN = 1200 //20 minutos
+const INACTIVITY_TIME = 2592000000 //30 días
 
 class UserService {
     
@@ -103,7 +96,6 @@ class UserService {
             for(let doc of necessaryDocs){
                 if(files[doc]){
                     let file = files[doc][0]
-                    console.log(file.fieldname);
                     await userManager.updateUser({_id:uid}, {$push:{"documents":{name: file.fieldname , reference:file.filename}}})
                 }
             }

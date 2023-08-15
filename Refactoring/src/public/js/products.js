@@ -18,7 +18,6 @@ for (let i = 0; i < btn.length; i++) {
         const product = attributes[0]
         const cart = attributes[1]
         const token = attributes[2]
-        console.log(product, cart, token);
 
         await addProductToCart(cart, product, token)
     })

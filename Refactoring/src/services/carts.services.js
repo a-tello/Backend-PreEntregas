@@ -53,12 +53,12 @@ class CartService {
         }   
     }
     
-    async addProductsToCart (cartId, products) {
+    async addProductsToCart (cartId, products, user) {
         try{
-            products.forEach(async product => {
-                await this.addProductToCart(cartId, product.product, product.quantity )
-            })
-            return
+            for(let product of products) {
+                await this.addProductToCart(cartId, product.product, user, product.quantity )
+            }
+            return await cartManager.getCartById(cartId)
         } catch(err) {
             throw err
         }
