@@ -1,0 +1,186 @@
+paths:
+  /api/products:
+    get:
+      sumary: Get all products
+      parameters:
+        - name: limit
+          in: query
+          type: integer
+          minimum: 1
+          description: Limit of products. Default 10
+        - name: page
+          in: query
+          type: integer
+          minimum: 1  
+          description: Number of page. Default 1
+        - name: sort
+          in: query
+          example: asc desc
+          type: string
+          enum:
+            - asc
+            - desc
+          minimum: 1  
+          description: Product order (asc / desc). Default asc
+        - name: field
+          in: query
+          type: string
+          enum:
+            - category
+            - price
+          minimum: 1  
+          description: Filter by field (category or price)
+
+      responses:
+        '200':
+          description: All products found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/products'
+        '400':
+          description: Some data is missing
+        '500':
+          description: Server error
+      tags:
+        - Products
+    post:
+      security: 
+        - bearerAuth: []
+      sumary: Add one product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product'
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'
+        '400':
+          description: Error. Missing info
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+      tags:
+        - Products
+  
+  /api/products/{id}:
+    get:
+      sumary: Get one product by ID
+      parameters:
+        - name: id
+          in: path
+          description: Product identifier
+      responses:
+        '200':
+          description: One product found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'
+        '400':
+          description: Product doesn't exist
+        '500':
+          description: Server error
+      tags:
+        - Products
+    put:
+      security: 
+        - bearerAuth: []
+      sumary: Update one product
+      parameters:
+        - name: id
+          in: path
+          description: Product identifier
+      responses:
+        '201':
+          description: Product updated successfully
+        '400':
+          description: Error. The product doesn't exist.
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+      tags:
+        - Products
+    delete:
+      security: 
+        - bearerAuth: []
+      sumary: Update one product
+      parameters:
+        - name: id
+          in: path
+          description: Product identifier
+      responses:
+        '204':
+          description: Product deleted successfully
+        '400':
+          description: Error. The product doesn't exist.
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+      tags:
+        - Products
+
+
+components:
+  
+  schemas:
+    product:
+      type: object
+      properties:
+        title: 
+          type: string
+        description: 
+          type: string
+        price: 
+          type: number
+        thumbnail: 
+          type: string
+        code: 
+          type: string
+        stock: 
+          type: number
+        category: 
+          type: string
+        status: 
+          type: boolean
+        owner: 
+          type: string
+  
+    products:
+      type: object
+      properties:
+        status:
+          type: boolean
+        payload:
+          $ref: '#/components/schemas/product'
+        totalPages:
+          type: integer
+        prevPage:
+          type: integer
+        nextPage:
+          type: integer
+        page:
+          type: integer
+        hasPrevPage:
+          type: boolean
+        hasNextPage:
+          type: boolean  
+        prevLink:
+          type: string
+        nextLink:
+          type: string
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

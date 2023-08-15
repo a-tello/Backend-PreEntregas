@@ -15,6 +15,8 @@ import handlebars from 'express-handlebars'
 import cookieParser from 'cookie-parser'
 import passport from "passport"
 import cors from 'cors'
+import swaggerUI from 'swagger-ui-express'
+import { swaggerSetup } from './swaggerSpecs.js'
 
 const PORT = config.port
 const app = express()
@@ -47,6 +49,7 @@ app.use('/chat', chatRouter)
 app.use('/api/sessions', sessionsRouter)
 app.use('/api/users', usersRouter)
 app.use('/views', viewsRouter)
+app.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerSetup))
 app.use('/', (req, res) => res.redirect('/views/login'))
 
 
